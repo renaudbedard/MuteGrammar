@@ -1,0 +1,8 @@
+Condition=4
+WHITESPACE=8
+Operation=3
+EOL=7
+Statement=1
+COMMENT=6
+Assignment=5
+Identifier=2
