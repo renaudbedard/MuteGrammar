@@ -29,6 +29,19 @@ public class MuteBaseListener implements MuteListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterStatement(@NotNull MuteParser.StatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitStatement(@NotNull MuteParser.StatementContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterAssignmentList(@NotNull MuteParser.AssignmentListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -68,19 +81,6 @@ public class MuteBaseListener implements MuteListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterModule(@NotNull MuteParser.ModuleContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitModule(@NotNull MuteParser.ModuleContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
 	@Override public void enterCondition(@NotNull MuteParser.ConditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -94,19 +94,6 @@ public class MuteBaseListener implements MuteListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterUnnamedStatement(@NotNull MuteParser.UnnamedStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitUnnamedStatement(@NotNull MuteParser.UnnamedStatementContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
 	@Override public void enterParse(@NotNull MuteParser.ParseContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -114,45 +101,6 @@ public class MuteBaseListener implements MuteListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitParse(@NotNull MuteParser.ParseContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterNamedStatement(@NotNull MuteParser.NamedStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitNamedStatement(@NotNull MuteParser.NamedStatementContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterEmptyStatement(@NotNull MuteParser.EmptyStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitEmptyStatement(@NotNull MuteParser.EmptyStatementContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterModuleStatement(@NotNull MuteParser.ModuleStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitModuleStatement(@NotNull MuteParser.ModuleStatementContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

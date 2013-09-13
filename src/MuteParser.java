@@ -14,18 +14,18 @@ public class MuteParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__10=1, T__9=2, T__8=3, T__7=4, T__6=5, T__5=6, T__4=7, T__3=8, T__2=9, 
-		T__1=10, T__0=11, ID=12, VALUE=13, COMMENT=14, EOL=15, WHITESPACE=16;
+		T__8=1, T__7=2, T__6=3, T__5=4, T__4=5, T__3=6, T__2=7, T__1=8, T__0=9, 
+		ID=10, VALUE=11, MODULE=12, OPERATOR=13, COMMENT=14, WHITESPACE=15, EOL=16;
 	public static final String[] tokenNames = {
-		"<INVALID>", "']'", "'>'", "'{'", "')'", "'.'", "','", "'['", "'('", "':'", 
-		"'<'", "'}'", "ID", "VALUE", "COMMENT", "EOL", "WHITESPACE"
+		"<INVALID>", "']'", "'{'", "')'", "'.'", "','", "'['", "'('", "':'", "'}'", 
+		"ID", "VALUE", "MODULE", "OPERATOR", "COMMENT", "WHITESPACE", "EOL"
 	};
 	public static final int
-		RULE_parse = 0, RULE_statement = 1, RULE_module = 2, RULE_operation = 3, 
-		RULE_condition = 4, RULE_assignmentList = 5, RULE_assignment = 6, RULE_expression = 7;
+		RULE_parse = 0, RULE_statement = 1, RULE_operation = 2, RULE_condition = 3, 
+		RULE_assignmentList = 4, RULE_assignment = 5, RULE_expression = 6;
 	public static final String[] ruleNames = {
-		"parse", "statement", "module", "operation", "condition", "assignmentList", 
-		"assignment", "expression"
+		"parse", "statement", "operation", "condition", "assignmentList", "assignment", 
+		"expression"
 	};
 
 	@Override
@@ -73,20 +73,20 @@ public class MuteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(17); 
+			setState(15); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(16); statement();
+				setState(14); statement();
 				}
 				}
-				setState(19); 
+				setState(17); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 3) | (1L << 7) | (1L << 8) | (1L << 10) | (1L << ID) | (1L << EOL))) != 0) );
-			setState(21); match(EOF);
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 2) | (1L << 6) | (1L << 7) | (1L << ID) | (1L << MODULE) | (1L << EOL))) != 0) );
+			setState(19); match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -101,111 +101,38 @@ public class MuteParser extends Parser {
 	}
 
 	public static class StatementContext extends ParserRuleContext {
+		public TerminalNode MODULE() { return getToken(MuteParser.MODULE, 0); }
+		public List<ConditionContext> condition() {
+			return getRuleContexts(ConditionContext.class);
+		}
+		public List<OperationContext> operation() {
+			return getRuleContexts(OperationContext.class);
+		}
+		public TerminalNode EOL() { return getToken(MuteParser.EOL, 0); }
+		public ConditionContext condition(int i) {
+			return getRuleContext(ConditionContext.class,i);
+		}
+		public TerminalNode ID() { return getToken(MuteParser.ID, 0); }
+		public List<AssignmentListContext> assignmentList() {
+			return getRuleContexts(AssignmentListContext.class);
+		}
+		public AssignmentListContext assignmentList(int i) {
+			return getRuleContext(AssignmentListContext.class,i);
+		}
+		public OperationContext operation(int i) {
+			return getRuleContext(OperationContext.class,i);
+		}
 		public StatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_statement; }
-	 
-		public StatementContext() { }
-		public void copyFrom(StatementContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class UnnamedStatementContext extends StatementContext {
-		public List<ConditionContext> condition() {
-			return getRuleContexts(ConditionContext.class);
-		}
-		public List<OperationContext> operation() {
-			return getRuleContexts(OperationContext.class);
-		}
-		public TerminalNode EOL() { return getToken(MuteParser.EOL, 0); }
-		public ConditionContext condition(int i) {
-			return getRuleContext(ConditionContext.class,i);
-		}
-		public List<AssignmentListContext> assignmentList() {
-			return getRuleContexts(AssignmentListContext.class);
-		}
-		public AssignmentListContext assignmentList(int i) {
-			return getRuleContext(AssignmentListContext.class,i);
-		}
-		public OperationContext operation(int i) {
-			return getRuleContext(OperationContext.class,i);
-		}
-		public UnnamedStatementContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).enterUnnamedStatement(this);
+			if ( listener instanceof MuteListener ) ((MuteListener)listener).enterStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).exitUnnamedStatement(this);
-		}
-	}
-	public static class NamedStatementContext extends StatementContext {
-		public List<ConditionContext> condition() {
-			return getRuleContexts(ConditionContext.class);
-		}
-		public List<OperationContext> operation() {
-			return getRuleContexts(OperationContext.class);
-		}
-		public TerminalNode EOL() { return getToken(MuteParser.EOL, 0); }
-		public ConditionContext condition(int i) {
-			return getRuleContext(ConditionContext.class,i);
-		}
-		public List<AssignmentListContext> assignmentList() {
-			return getRuleContexts(AssignmentListContext.class);
-		}
-		public TerminalNode ID() { return getToken(MuteParser.ID, 0); }
-		public AssignmentListContext assignmentList(int i) {
-			return getRuleContext(AssignmentListContext.class,i);
-		}
-		public OperationContext operation(int i) {
-			return getRuleContext(OperationContext.class,i);
-		}
-		public NamedStatementContext(StatementContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).enterNamedStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).exitNamedStatement(this);
-		}
-	}
-	public static class ModuleStatementContext extends StatementContext {
-		public List<ConditionContext> condition() {
-			return getRuleContexts(ConditionContext.class);
-		}
-		public TerminalNode EOL() { return getToken(MuteParser.EOL, 0); }
-		public ModuleContext module() {
-			return getRuleContext(ModuleContext.class,0);
-		}
-		public ConditionContext condition(int i) {
-			return getRuleContext(ConditionContext.class,i);
-		}
-		public AssignmentListContext assignmentList() {
-			return getRuleContext(AssignmentListContext.class,0);
-		}
-		public ModuleStatementContext(StatementContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).enterModuleStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).exitModuleStatement(this);
-		}
-	}
-	public static class EmptyStatementContext extends StatementContext {
-		public TerminalNode EOL() { return getToken(MuteParser.EOL, 0); }
-		public EmptyStatementContext(StatementContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).enterEmptyStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).exitEmptyStatement(this);
+			if ( listener instanceof MuteListener ) ((MuteListener)listener).exitStatement(this);
 		}
 	}
 
@@ -214,172 +141,244 @@ public class MuteParser extends Parser {
 		enterRule(_localctx, 2, RULE_statement);
 		int _la;
 		try {
-			setState(73);
-			switch (_input.LA(1)) {
-			case 10:
-				_localctx = new ModuleStatementContext(_localctx);
+			setState(120);
+			switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
+			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(23); module();
-				setState(27);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==8) {
-					{
-					{
-					setState(24); condition();
-					}
-					}
-					setState(29);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				setState(30); assignmentList();
-				setState(31); match(EOL);
-				}
-				break;
-			case ID:
-				_localctx = new NamedStatementContext(_localctx);
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(33); match(ID);
-				setState(37);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==8) {
-					{
-					{
-					setState(34); condition();
-					}
-					}
-					setState(39);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				setState(41); 
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				do {
-					{
-					{
-					setState(40); assignmentList();
-					}
-					}
-					setState(43); 
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				} while ( _la==7 );
-				setState(48);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==3) {
-					{
-					{
-					setState(45); operation();
-					}
-					}
-					setState(50);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				setState(51); match(EOL);
-				}
-				break;
-			case 3:
-			case 7:
-			case 8:
-				_localctx = new UnnamedStatementContext(_localctx);
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(56);
+				setState(21); match(MODULE);
+				setState(25);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==7) {
 					{
 					{
-					setState(53); assignmentList();
+					setState(22); condition();
+					}
+					}
+					setState(27);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(28); assignmentList();
+				setState(29); match(EOL);
+				}
+				break;
+
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(31); match(MODULE);
+				setState(32); assignmentList();
+				setState(36);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==7) {
+					{
+					{
+					setState(33); condition();
+					}
+					}
+					setState(38);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(39); match(EOL);
+				}
+				break;
+
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(41); match(ID);
+				setState(45);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==7) {
+					{
+					{
+					setState(42); condition();
+					}
+					}
+					setState(47);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(49); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				do {
+					{
+					{
+					setState(48); assignmentList();
+					}
+					}
+					setState(51); 
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				} while ( _la==6 );
+				setState(56);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==2) {
+					{
+					{
+					setState(53); operation();
 					}
 					}
 					setState(58);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(62);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==8) {
-					{
-					{
-					setState(59); condition();
-					}
-					}
-					setState(64);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
+				setState(59); match(EOL);
 				}
-				setState(66); 
+				break;
+
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(61); match(ID);
+				setState(63); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(65); operation();
+					setState(62); assignmentList();
 					}
 					}
-					setState(68); 
+					setState(65); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( _la==3 );
-				setState(70); match(EOL);
+				} while ( _la==6 );
+				setState(70);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==7) {
+					{
+					{
+					setState(67); condition();
+					}
+					}
+					setState(72);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(76);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==2) {
+					{
+					{
+					setState(73); operation();
+					}
+					}
+					setState(78);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(79); match(EOL);
 				}
 				break;
-			case EOL:
-				_localctx = new EmptyStatementContext(_localctx);
-				enterOuterAlt(_localctx, 4);
+
+			case 5:
+				enterOuterAlt(_localctx, 5);
 				{
-				setState(72); match(EOL);
+				setState(84);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==6) {
+					{
+					{
+					setState(81); assignmentList();
+					}
+					}
+					setState(86);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(90);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==7) {
+					{
+					{
+					setState(87); condition();
+					}
+					}
+					setState(92);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(94); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				do {
+					{
+					{
+					setState(93); operation();
+					}
+					}
+					setState(96); 
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				} while ( _la==2 );
+				setState(98); match(EOL);
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
 
-	public static class ModuleContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(MuteParser.ID, 0); }
-		public ModuleContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_module; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).enterModule(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).exitModule(this);
-		}
-	}
+			case 6:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(103);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==7) {
+					{
+					{
+					setState(100); condition();
+					}
+					}
+					setState(105);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(109);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==6) {
+					{
+					{
+					setState(106); assignmentList();
+					}
+					}
+					setState(111);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(113); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				do {
+					{
+					{
+					setState(112); operation();
+					}
+					}
+					setState(115); 
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				} while ( _la==2 );
+				setState(117); match(EOL);
+				}
+				break;
 
-	public final ModuleContext module() throws RecognitionException {
-		ModuleContext _localctx = new ModuleContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_module);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(75); match(10);
-			setState(76); match(ID);
-			setState(77); match(2);
+			case 7:
+				enterOuterAlt(_localctx, 7);
+				{
+				setState(119); match(EOL);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -394,7 +393,13 @@ public class MuteParser extends Parser {
 	}
 
 	public static class OperationContext extends ParserRuleContext {
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
 		public TerminalNode VALUE() { return getToken(MuteParser.VALUE, 0); }
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
 		public OperationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -411,13 +416,30 @@ public class MuteParser extends Parser {
 
 	public final OperationContext operation() throws RecognitionException {
 		OperationContext _localctx = new OperationContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_operation);
+		enterRule(_localctx, 4, RULE_operation);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(79); match(3);
-			setState(80); match(VALUE);
-			setState(81); match(11);
+			setState(122); match(2);
+			setState(123); match(VALUE);
+			setState(128);
+			_errHandler.sync(this);
+			_alt = getInterpreter().adaptivePredict(_input,16,_ctx);
+			while ( _alt!=1 && _alt!=-1 ) {
+				if ( _alt==1+1 ) {
+					{
+					{
+					setState(124); match(5);
+					setState(125); expression(0);
+					}
+					} 
+				}
+				setState(130);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,16,_ctx);
+			}
+			setState(131); match(9);
 			}
 		}
 		catch (RecognitionException re) {
@@ -433,6 +455,10 @@ public class MuteParser extends Parser {
 
 	public static class ConditionContext extends ParserRuleContext {
 		public TerminalNode VALUE() { return getToken(MuteParser.VALUE, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public TerminalNode OPERATOR() { return getToken(MuteParser.OPERATOR, 0); }
 		public ConditionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -449,13 +475,15 @@ public class MuteParser extends Parser {
 
 	public final ConditionContext condition() throws RecognitionException {
 		ConditionContext _localctx = new ConditionContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_condition);
+		enterRule(_localctx, 6, RULE_condition);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(83); match(8);
-			setState(84); match(VALUE);
-			setState(85); match(4);
+			setState(133); match(7);
+			setState(134); expression(0);
+			setState(135); match(OPERATOR);
+			setState(136); match(VALUE);
+			setState(137); match(3);
 			}
 		}
 		catch (RecognitionException re) {
@@ -492,30 +520,30 @@ public class MuteParser extends Parser {
 
 	public final AssignmentListContext assignmentList() throws RecognitionException {
 		AssignmentListContext _localctx = new AssignmentListContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_assignmentList);
+		enterRule(_localctx, 8, RULE_assignmentList);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(87); match(7);
-			setState(88); assignment();
-			setState(93);
+			setState(139); match(6);
+			setState(140); assignment();
+			setState(145);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,17,_ctx);
 			while ( _alt!=1 && _alt!=-1 ) {
 				if ( _alt==1+1 ) {
 					{
 					{
-					setState(89); match(6);
-					setState(90); assignment();
+					setState(141); match(5);
+					setState(142); assignment();
 					}
 					} 
 				}
-				setState(95);
+				setState(147);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,17,_ctx);
 			}
-			setState(96); match(1);
+			setState(148); match(1);
 			}
 		}
 		catch (RecognitionException re) {
@@ -551,17 +579,17 @@ public class MuteParser extends Parser {
 
 	public final AssignmentContext assignment() throws RecognitionException {
 		AssignmentContext _localctx = new AssignmentContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_assignment);
+		enterRule(_localctx, 10, RULE_assignment);
 		int _la;
 		try {
-			setState(103);
+			setState(155);
 			switch (_input.LA(1)) {
 			case ID:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(98); expression(0);
-				setState(99); match(9);
-				setState(100);
+				setState(150); expression(0);
+				setState(151); match(8);
+				setState(152);
 				_la = _input.LA(1);
 				if ( !(_la==ID || _la==VALUE) ) {
 				_errHandler.recoverInline(this);
@@ -572,7 +600,7 @@ public class MuteParser extends Parser {
 			case VALUE:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(102); match(VALUE);
+				setState(154); match(VALUE);
 				}
 				break;
 			default:
@@ -617,19 +645,19 @@ public class MuteParser extends Parser {
 		int _parentState = getState();
 		ExpressionContext _localctx = new ExpressionContext(_ctx, _parentState, _p);
 		ExpressionContext _prevctx = _localctx;
-		int _startState = 14;
+		int _startState = 12;
 		enterRecursionRule(_localctx, RULE_expression);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(106); match(ID);
+			setState(158); match(ID);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(113);
+			setState(165);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,19,_ctx);
 			while ( _alt!=2 && _alt!=-1 ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
@@ -638,16 +666,16 @@ public class MuteParser extends Parser {
 					{
 					_localctx = new ExpressionContext(_parentctx, _parentState, _p);
 					pushNewRecursionContext(_localctx, _startState, RULE_expression);
-					setState(108);
+					setState(160);
 					if (!(1 >= _localctx._p)) throw new FailedPredicateException(this, "1 >= $_p");
-					setState(109); match(5);
-					setState(110); match(ID);
+					setState(161); match(4);
+					setState(162); match(ID);
 					}
 					} 
 				}
-				setState(115);
+				setState(167);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,19,_ctx);
 			}
 			}
 		}
@@ -664,7 +692,7 @@ public class MuteParser extends Parser {
 
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 7: return expression_sempred((ExpressionContext)_localctx, predIndex);
+		case 6: return expression_sempred((ExpressionContext)_localctx, predIndex);
 		}
 		return true;
 	}
@@ -676,35 +704,55 @@ public class MuteParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3\22w\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\3\2\6\2\24\n\2\r\2"+
-		"\16\2\25\3\2\3\2\3\3\3\3\7\3\34\n\3\f\3\16\3\37\13\3\3\3\3\3\3\3\3\3\3"+
-		"\3\7\3&\n\3\f\3\16\3)\13\3\3\3\6\3,\n\3\r\3\16\3-\3\3\7\3\61\n\3\f\3\16"+
-		"\3\64\13\3\3\3\3\3\3\3\7\39\n\3\f\3\16\3<\13\3\3\3\7\3?\n\3\f\3\16\3B"+
-		"\13\3\3\3\6\3E\n\3\r\3\16\3F\3\3\3\3\3\3\5\3L\n\3\3\4\3\4\3\4\3\4\3\5"+
-		"\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\7\7^\n\7\f\7\16\7a\13\7\3"+
-		"\7\3\7\3\b\3\b\3\b\3\b\3\b\5\bj\n\b\3\t\3\t\3\t\3\t\3\t\3\t\7\tr\n\t\f"+
-		"\t\16\tu\13\t\3\t\3_\n\2\4\6\b\n\f\16\20\2\3\3\2\16\17|\2\23\3\2\2\2\4"+
-		"K\3\2\2\2\6M\3\2\2\2\bQ\3\2\2\2\nU\3\2\2\2\fY\3\2\2\2\16i\3\2\2\2\20k"+
-		"\3\2\2\2\22\24\5\4\3\2\23\22\3\2\2\2\24\25\3\2\2\2\25\23\3\2\2\2\25\26"+
-		"\3\2\2\2\26\27\3\2\2\2\27\30\7\2\2\3\30\3\3\2\2\2\31\35\5\6\4\2\32\34"+
-		"\5\n\6\2\33\32\3\2\2\2\34\37\3\2\2\2\35\33\3\2\2\2\35\36\3\2\2\2\36 \3"+
-		"\2\2\2\37\35\3\2\2\2 !\5\f\7\2!\"\7\21\2\2\"L\3\2\2\2#\'\7\16\2\2$&\5"+
-		"\n\6\2%$\3\2\2\2&)\3\2\2\2\'%\3\2\2\2\'(\3\2\2\2(+\3\2\2\2)\'\3\2\2\2"+
-		"*,\5\f\7\2+*\3\2\2\2,-\3\2\2\2-+\3\2\2\2-.\3\2\2\2.\62\3\2\2\2/\61\5\b"+
-		"\5\2\60/\3\2\2\2\61\64\3\2\2\2\62\60\3\2\2\2\62\63\3\2\2\2\63\65\3\2\2"+
-		"\2\64\62\3\2\2\2\65\66\7\21\2\2\66L\3\2\2\2\679\5\f\7\28\67\3\2\2\29<"+
-		"\3\2\2\2:8\3\2\2\2:;\3\2\2\2;@\3\2\2\2<:\3\2\2\2=?\5\n\6\2>=\3\2\2\2?"+
-		"B\3\2\2\2@>\3\2\2\2@A\3\2\2\2AD\3\2\2\2B@\3\2\2\2CE\5\b\5\2DC\3\2\2\2"+
-		"EF\3\2\2\2FD\3\2\2\2FG\3\2\2\2GH\3\2\2\2HI\7\21\2\2IL\3\2\2\2JL\7\21\2"+
-		"\2K\31\3\2\2\2K#\3\2\2\2K:\3\2\2\2KJ\3\2\2\2L\5\3\2\2\2MN\7\f\2\2NO\7"+
-		"\16\2\2OP\7\4\2\2P\7\3\2\2\2QR\7\5\2\2RS\7\17\2\2ST\7\r\2\2T\t\3\2\2\2"+
-		"UV\7\n\2\2VW\7\17\2\2WX\7\6\2\2X\13\3\2\2\2YZ\7\t\2\2Z_\5\16\b\2[\\\7"+
-		"\b\2\2\\^\5\16\b\2][\3\2\2\2^a\3\2\2\2_`\3\2\2\2_]\3\2\2\2`b\3\2\2\2a"+
-		"_\3\2\2\2bc\7\3\2\2c\r\3\2\2\2de\5\20\t\2ef\7\13\2\2fg\t\2\2\2gj\3\2\2"+
-		"\2hj\7\17\2\2id\3\2\2\2ih\3\2\2\2j\17\3\2\2\2kl\b\t\1\2lm\7\16\2\2ms\3"+
-		"\2\2\2no\6\t\2\3op\7\7\2\2pr\7\16\2\2qn\3\2\2\2ru\3\2\2\2sq\3\2\2\2st"+
-		"\3\2\2\2t\21\3\2\2\2us\3\2\2\2\16\25\35\'-\62:@FK_is";
+		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3\22\u00ab\4\2\t\2"+
+		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\3\2\6\2\22\n\2\r\2\16"+
+		"\2\23\3\2\3\2\3\3\3\3\7\3\32\n\3\f\3\16\3\35\13\3\3\3\3\3\3\3\3\3\3\3"+
+		"\3\3\7\3%\n\3\f\3\16\3(\13\3\3\3\3\3\3\3\3\3\7\3.\n\3\f\3\16\3\61\13\3"+
+		"\3\3\6\3\64\n\3\r\3\16\3\65\3\3\7\39\n\3\f\3\16\3<\13\3\3\3\3\3\3\3\3"+
+		"\3\6\3B\n\3\r\3\16\3C\3\3\7\3G\n\3\f\3\16\3J\13\3\3\3\7\3M\n\3\f\3\16"+
+		"\3P\13\3\3\3\3\3\3\3\7\3U\n\3\f\3\16\3X\13\3\3\3\7\3[\n\3\f\3\16\3^\13"+
+		"\3\3\3\6\3a\n\3\r\3\16\3b\3\3\3\3\3\3\7\3h\n\3\f\3\16\3k\13\3\3\3\7\3"+
+		"n\n\3\f\3\16\3q\13\3\3\3\6\3t\n\3\r\3\16\3u\3\3\3\3\3\3\5\3{\n\3\3\4\3"+
+		"\4\3\4\3\4\7\4\u0081\n\4\f\4\16\4\u0084\13\4\3\4\3\4\3\5\3\5\3\5\3\5\3"+
+		"\5\3\5\3\6\3\6\3\6\3\6\7\6\u0092\n\6\f\6\16\6\u0095\13\6\3\6\3\6\3\7\3"+
+		"\7\3\7\3\7\3\7\5\7\u009e\n\7\3\b\3\b\3\b\3\b\3\b\3\b\7\b\u00a6\n\b\f\b"+
+		"\16\b\u00a9\13\b\3\b\4\u0082\u0093\t\2\4\6\b\n\f\16\2\3\3\2\f\r\u00bc"+
+		"\2\21\3\2\2\2\4z\3\2\2\2\6|\3\2\2\2\b\u0087\3\2\2\2\n\u008d\3\2\2\2\f"+
+		"\u009d\3\2\2\2\16\u009f\3\2\2\2\20\22\5\4\3\2\21\20\3\2\2\2\22\23\3\2"+
+		"\2\2\23\21\3\2\2\2\23\24\3\2\2\2\24\25\3\2\2\2\25\26\7\2\2\3\26\3\3\2"+
+		"\2\2\27\33\7\16\2\2\30\32\5\b\5\2\31\30\3\2\2\2\32\35\3\2\2\2\33\31\3"+
+		"\2\2\2\33\34\3\2\2\2\34\36\3\2\2\2\35\33\3\2\2\2\36\37\5\n\6\2\37 \7\22"+
+		"\2\2 {\3\2\2\2!\"\7\16\2\2\"&\5\n\6\2#%\5\b\5\2$#\3\2\2\2%(\3\2\2\2&$"+
+		"\3\2\2\2&\'\3\2\2\2\')\3\2\2\2(&\3\2\2\2)*\7\22\2\2*{\3\2\2\2+/\7\f\2"+
+		"\2,.\5\b\5\2-,\3\2\2\2.\61\3\2\2\2/-\3\2\2\2/\60\3\2\2\2\60\63\3\2\2\2"+
+		"\61/\3\2\2\2\62\64\5\n\6\2\63\62\3\2\2\2\64\65\3\2\2\2\65\63\3\2\2\2\65"+
+		"\66\3\2\2\2\66:\3\2\2\2\679\5\6\4\28\67\3\2\2\29<\3\2\2\2:8\3\2\2\2:;"+
+		"\3\2\2\2;=\3\2\2\2<:\3\2\2\2=>\7\22\2\2>{\3\2\2\2?A\7\f\2\2@B\5\n\6\2"+
+		"A@\3\2\2\2BC\3\2\2\2CA\3\2\2\2CD\3\2\2\2DH\3\2\2\2EG\5\b\5\2FE\3\2\2\2"+
+		"GJ\3\2\2\2HF\3\2\2\2HI\3\2\2\2IN\3\2\2\2JH\3\2\2\2KM\5\6\4\2LK\3\2\2\2"+
+		"MP\3\2\2\2NL\3\2\2\2NO\3\2\2\2OQ\3\2\2\2PN\3\2\2\2QR\7\22\2\2R{\3\2\2"+
+		"\2SU\5\n\6\2TS\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2W\\\3\2\2\2XV\3\2"+
+		"\2\2Y[\5\b\5\2ZY\3\2\2\2[^\3\2\2\2\\Z\3\2\2\2\\]\3\2\2\2]`\3\2\2\2^\\"+
+		"\3\2\2\2_a\5\6\4\2`_\3\2\2\2ab\3\2\2\2b`\3\2\2\2bc\3\2\2\2cd\3\2\2\2d"+
+		"e\7\22\2\2e{\3\2\2\2fh\5\b\5\2gf\3\2\2\2hk\3\2\2\2ig\3\2\2\2ij\3\2\2\2"+
+		"jo\3\2\2\2ki\3\2\2\2ln\5\n\6\2ml\3\2\2\2nq\3\2\2\2om\3\2\2\2op\3\2\2\2"+
+		"ps\3\2\2\2qo\3\2\2\2rt\5\6\4\2sr\3\2\2\2tu\3\2\2\2us\3\2\2\2uv\3\2\2\2"+
+		"vw\3\2\2\2wx\7\22\2\2x{\3\2\2\2y{\7\22\2\2z\27\3\2\2\2z!\3\2\2\2z+\3\2"+
+		"\2\2z?\3\2\2\2zV\3\2\2\2zi\3\2\2\2zy\3\2\2\2{\5\3\2\2\2|}\7\4\2\2}\u0082"+
+		"\7\r\2\2~\177\7\7\2\2\177\u0081\5\16\b\2\u0080~\3\2\2\2\u0081\u0084\3"+
+		"\2\2\2\u0082\u0083\3\2\2\2\u0082\u0080\3\2\2\2\u0083\u0085\3\2\2\2\u0084"+
+		"\u0082\3\2\2\2\u0085\u0086\7\13\2\2\u0086\7\3\2\2\2\u0087\u0088\7\t\2"+
+		"\2\u0088\u0089\5\16\b\2\u0089\u008a\7\17\2\2\u008a\u008b\7\r\2\2\u008b"+
+		"\u008c\7\5\2\2\u008c\t\3\2\2\2\u008d\u008e\7\b\2\2\u008e\u0093\5\f\7\2"+
+		"\u008f\u0090\7\7\2\2\u0090\u0092\5\f\7\2\u0091\u008f\3\2\2\2\u0092\u0095"+
+		"\3\2\2\2\u0093\u0094\3\2\2\2\u0093\u0091\3\2\2\2\u0094\u0096\3\2\2\2\u0095"+
+		"\u0093\3\2\2\2\u0096\u0097\7\3\2\2\u0097\13\3\2\2\2\u0098\u0099\5\16\b"+
+		"\2\u0099\u009a\7\n\2\2\u009a\u009b\t\2\2\2\u009b\u009e\3\2\2\2\u009c\u009e"+
+		"\7\r\2\2\u009d\u0098\3\2\2\2\u009d\u009c\3\2\2\2\u009e\r\3\2\2\2\u009f"+
+		"\u00a0\b\b\1\2\u00a0\u00a1\7\f\2\2\u00a1\u00a7\3\2\2\2\u00a2\u00a3\6\b"+
+		"\2\3\u00a3\u00a4\7\6\2\2\u00a4\u00a6\7\f\2\2\u00a5\u00a2\3\2\2\2\u00a6"+
+		"\u00a9\3\2\2\2\u00a7\u00a5\3\2\2\2\u00a7\u00a8\3\2\2\2\u00a8\17\3\2\2"+
+		"\2\u00a9\u00a7\3\2\2\2\26\23\33&/\65:CHNV\\biouz\u0082\u0093\u009d\u00a7";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {
