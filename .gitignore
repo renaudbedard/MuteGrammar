@@ -1,10 +1,7 @@
-*.class
-
 # Package Files #
 *.jar
 *.war
 *.ear
 /.settings/
-/bin/
 /Compile Grammar.lnk
 /Test Run.lnk
