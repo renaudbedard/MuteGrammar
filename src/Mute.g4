@@ -1,44 +1,61 @@
 grammar Mute;
 
 parse
-	: Statement* EOF
+	: statement+ EOF
 	;
 
-Statement
-	: Identifier? Condition* Assignment* Operation* EOL
+statement
+	: module condition* assignmentList EOL			# moduleStatement
+	| ID condition* assignmentList+ operation* EOL	# namedStatement
+	| assignmentList* condition* operation+ EOL		# unnamedStatement
+	| EOL											# emptyStatement
+	;
+	
+module
+	: '<' ID '>'
 	;
 
-Identifier
-	: ~(
-		  '[' | ']' 
-		| '<' | '>' 
-		| '(' | ')' 
-		| '{' | '}' 
-		| '#' | '"' | ':' | ',' | '$' | '.' | '~'
-		| ' ' | '\t' | '\n' | '\r' | '\u000C'
-	)+
+operation
+	: '{' VALUE '}'
 	;
 
-Operation
-	: 
+condition
+	: '(' VALUE ')'
+	;
+	
+assignmentList
+	: '[' assignment (',' assignment)*? ']'
+	;
+	
+assignment
+	: expression ':' (ID | VALUE)
+	| VALUE
+	;
+	
+expression
+	: ID
+	| expression '.' ID
+	;
+	
+ID : ID_LETTER (ID_LETTER | DIGIT)* | '$';
+
+VALUE
+	: STRING
+	| INT
+	| FLOAT
 	;
 
-Condition
-	:
+fragment STRING : '"' CHARACTER*? '"' ;
+fragment CHARACTER : ~[\r\n] ;
+fragment INT : DIGIT+ ;
+fragment FLOAT
+	: DIGIT+ '.' DIGIT*
+	| '.' DIGIT+
 	;
-	
-Assignment
-	:
-	;
-	
-COMMENT
-	: '#' .*? EOL -> skip
-	;
-	
-EOL	
-	: '\r'? '\n' | '\r'
-	;
-	
-WHITESPACE
-	: [ \t\u000C]+ -> skip
-	;
+
+fragment ID_LETTER : [a-zA-Z_] ;
+fragment DIGIT : [0-9] ;
+
+COMMENT : '#' .*? EOL -> skip ;
+EOL : '\r'? '\n' | '\r' ;	
+WHITESPACE : [ \t]+ -> skip ;
