@@ -1,9 +1,5 @@
 grammar Mute;
 
-@lexer::members {
-	boolean inStatement = false;
-}
-
 // ============
 // PARSER RULES
 // ============
@@ -13,7 +9,7 @@ parse
 	;
 
 statement
-	: MODULE assignmentList 					// module setting
+	: MODULE assignmentList						// module setting
 	| ID assignmentList condition* operation?	// named statement (standard order)
 	| ID condition* assignmentList operation?	// named statement (inverted order)
 	| ID condition* operation					// named statement (without assignment)	
