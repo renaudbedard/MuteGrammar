@@ -1,76 +1,76 @@
 grammar Mute;
 
-// parser rules
+@lexer::members {
+	boolean inStatement = false;
+}
+
+// ============
+// PARSER RULES
+// ============
 
 parse
 	: statement+ EOF
 	;
 
 statement
-	: MODULE condition* assignmentList EOL
-	| MODULE assignmentList condition* EOL			
-	| ID condition* assignmentList+ operation* EOL	
-	| ID assignmentList+ condition* operation* EOL	
-	| assignmentList* condition* operation+ EOL		
-	| condition* assignmentList* operation+ EOL
-	| EOL											
+	: MODULE assignmentList 					// module setting
+	| ID assignmentList condition* operation?	// named statement (standard order)
+	| ID condition* assignmentList operation?	// named statement (inverted order)
+	| ID condition* operation					// named statement (without assignment)	
+	| assignmentList* condition* operation		// unnamed statement
+	| operation									// stray operations
 	;
 	
 operation
-	: '{' VALUE (',' expression)*? '}'
+	: '{' STRING (',' rValueExpression)*? '}'
+	| '{' lValueExpression assignmentList '}'	
+	| '{' rValueExpression '}'
 	;
 
 condition
-	: '(' expression OPERATOR VALUE ')'
+	: '(' rValueExpression COMP_OPERATOR rValueExpression ')'
 	;
 	
 assignmentList
-	: '[' assignment (',' assignment)*? ']'
+	: '[' assignment (',' assignment)*? ']' 
 	;
 	
 assignment
-	: expression ':' (ID | VALUE)
-	| VALUE
+	: ID ':' rValueExpression
+	| rValueExpression
 	;
 	
-expression
-	: ID
-	| expression '.' ID
+// An l-value expression is an alias to a location in memory; an assignable expression 
+lValueExpression
+	: lValueExpression '.' (lValueExpression | INT)
+	| ID
 	;
 	
-// lexer rules
-	
-ID : ID_LETTER (ID_LETTER | DIGIT)* | '$';
-
-VALUE
-	: STRING
-	| INT
-	| FLOAT
-	| RANGE
+// An r-value expression is a expression that translates to a value, in-memory or literal
+rValueExpression
+	: rValueExpression CALC_OPERATOR rValueExpression 
+	| (MODULE '.')? lValueExpression
+	| (STRING | INT | RANGE) 
 	;
-
-MODULE : '<' ID '>'	;
 	
-OPERATOR : '>=' | '>' | '<=' | '<' | '==' ;
+// ===========
+// LEXER RULES
+// ===========
 
-fragment STRING : '"' CHARACTER*? '"' ;
+COMMENT : '#' ~[\r\n]* -> skip ;
+	
+STRING : '"' CHARACTER*? '"' ;
+MODULE : '<' ID '>' ;
+ID : ID_LETTER (ID_LETTER | DIGIT)* | '$' ;
+RANGE : INT '~' INT ;
+INT : DIGIT+ ;
+	
+CALC_OPERATOR : '+' | '/' | '-' | '*' | '&' | '|' ;
+COMP_OPERATOR : '>=' | '>' | '<=' | '<' | '=' ;
+
 fragment CHARACTER : ~[\r\n] ;
-fragment INT : DIGIT+ ;
-
-fragment FLOAT
-	: DIGIT+ '.' DIGIT*
-	| '.' DIGIT+
-	;
-	
-fragment RANGE
-	: INT '~' INT
-	| FLOAT '~' FLOAT
-	;
-
 fragment ID_LETTER : [a-zA-Z_] ;
 fragment DIGIT : [0-9] ;
 
-COMMENT : '#' .*? EOL -> skip ;
+EOL : '\r'? '\n' -> skip ;
 WHITESPACE : [ \t]+ -> skip ;
-
-EOL : '\r'? '\n' | '\r' ;	

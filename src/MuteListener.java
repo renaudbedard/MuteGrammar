@@ -8,17 +8,6 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface MuteListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link MuteParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpression(@NotNull MuteParser.ExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MuteParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpression(@NotNull MuteParser.ExpressionContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link MuteParser#statement}.
 	 * @param ctx the parse tree
 	 */
@@ -74,6 +63,17 @@ public interface MuteListener extends ParseTreeListener {
 	void exitCondition(@NotNull MuteParser.ConditionContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link MuteParser#rValueExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRValueExpression(@NotNull MuteParser.RValueExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#rValueExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRValueExpression(@NotNull MuteParser.RValueExpressionContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link MuteParser#parse}.
 	 * @param ctx the parse tree
 	 */
@@ -83,4 +83,15 @@ public interface MuteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParse(@NotNull MuteParser.ParseContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#lValueExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLValueExpression(@NotNull MuteParser.LValueExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#lValueExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLValueExpression(@NotNull MuteParser.LValueExpressionContext ctx);
 }

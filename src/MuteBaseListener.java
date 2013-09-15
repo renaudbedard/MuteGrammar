@@ -16,19 +16,6 @@ public class MuteBaseListener implements MuteListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterExpression(@NotNull MuteParser.ExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitExpression(@NotNull MuteParser.ExpressionContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
 	@Override public void enterStatement(@NotNull MuteParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -94,6 +81,19 @@ public class MuteBaseListener implements MuteListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterRValueExpression(@NotNull MuteParser.RValueExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitRValueExpression(@NotNull MuteParser.RValueExpressionContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterParse(@NotNull MuteParser.ParseContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -101,6 +101,19 @@ public class MuteBaseListener implements MuteListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitParse(@NotNull MuteParser.ParseContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterLValueExpression(@NotNull MuteParser.LValueExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitLValueExpression(@NotNull MuteParser.LValueExpressionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -1,3 +1,22 @@
+a[5] # a = 5
+b(a>4)[5] # if(a > 4){b = 5;}
+b(a>4)[5]{c[5]}# if(a > 4){b = 5; c = 5;}
+
+{"Hello World"} # Hello world
+["Hello world"]{$} # Hello world
+[World]{"Hello @1",$} # Hello world
+
+a[2]
+b(a>1){"Hello World"} # Hello world (for a = 2)
+
+a[0,1,2,3] # This list/array has the name "a"
+b{"Third number: @1",a.2} # 2
+a{"Third number: @1",$.2} # 2, a line calling itself can use $ for self
+
+b($ > 1){"Hello World"}
+a[4]($ > a.1){b[3]} # Hello World, this sets b[x] with value of 3
+a[4]($ > a.1){b.3} # {null}, this gets the 3rd value of b[], i this case, null
+
 # start
 <system>[logs:on,memory:on]
 
