@@ -1,7 +1,7 @@
 MuteGrammar
 ===========
 
-[ANTLR v4](https://github.com/antlr/antlr4) Grammar for [aliceffekt](https://github.com/aliceffekt)'s [mute](https://github.com/user/repo/blob/branch/other_file.md) scripting language.
+[ANTLR v4](https://github.com/antlr/antlr4) Grammar for [aliceffekt](https://github.com/aliceffekt)'s [mute](https://github.com/aliceffekt/mute) scripting language.
 
 ## How to test
 
@@ -27,4 +27,5 @@ The compiler currently outputs the lisp-style parse tree it detects, with a line
 ## Status
 
 The ``Mute.g4`` grammar will parse everything from the [official Mute benchmark](https://github.com/aliceffekt/mute/blob/master/mute.benchmark.txt) at the time of this writing, but does nothing with the parsed output :)
+
 There are still ambiguities with newline handling, right now the grammar does not count newlines as data. This could change depending on what the specification intends.
