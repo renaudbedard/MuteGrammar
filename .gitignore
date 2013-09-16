@@ -1,7 +1,7 @@
 # Package Files #
-*.jar
 *.war
 *.ear
+/bin
 /.settings/
 /Compile Grammar.lnk
 /Test Run.lnk
