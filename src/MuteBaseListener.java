@@ -120,6 +120,19 @@ public class MuteBaseListener implements MuteListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterStatementPart(@NotNull MuteParser.StatementPartContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitStatementPart(@NotNull MuteParser.StatementPartContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterEveryRule(@NotNull ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}

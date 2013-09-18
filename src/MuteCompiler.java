@@ -24,7 +24,10 @@ public class MuteCompiler {
 		MuteParser parser = new MuteParser(tokens);
 		
 		ParseTree tree = parser.parse(); 
-		System.out.println(tree.toStringTree(parser).replace(" (statement", "\n\t(statement").replace("<EOF>", "\n<EOF>"));
+		System.out.println(tree.toStringTree(parser)
+				.replace("(statementPart", "\n\t\t(statementPart")
+				.replace("(statement ", "\n\t(statement ")				
+				.replace("<EOF>", "\n<EOF>"));
 	}
 
 }

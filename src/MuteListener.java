@@ -94,4 +94,15 @@ public interface MuteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLValueExpression(@NotNull MuteParser.LValueExpressionContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#statementPart}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatementPart(@NotNull MuteParser.StatementPartContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#statementPart}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatementPart(@NotNull MuteParser.StatementPartContext ctx);
 }
