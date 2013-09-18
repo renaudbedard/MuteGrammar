@@ -26,6 +26,11 @@ The compiler currently outputs the lisp-style parse tree it detects, with a line
 
 ## Status
 
-The ``Mute.g4`` grammar will parse everything from the [official Mute benchmark](https://github.com/aliceffekt/mute/blob/master/mute.benchmark.txt) at the time of this writing, but does nothing with the parsed output :)
+The ``Mute.g4`` grammar will parse everything from the [official Mute benchmark](https://github.com/aliceffekt/mute/blob/master/mute.benchmark.txt) at the time of this writing, but does nothing with the parsed output!
 
-There are still ambiguities with newline handling, right now the grammar does not count newlines as data. This could change depending on what the specification intends.
+###Current parsing limitations
+
+- Requires identifiers (names) to be at the beginning of a statement
+- Statement fragments that follow a module declaration must obey standard condition/assignation/operation block structure, but mute may accept anything at all as per the current spec
+- Identifiers must be ascii characters, unicode is not currently supported
+- Mac-style carriage returns without line feeds are not supported
