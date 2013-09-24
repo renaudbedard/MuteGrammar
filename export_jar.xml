@@ -3,9 +3,9 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <target name="create_run_jar">
-        <jar destfile="C:/Users/Renaud/workspace/MuteGrammar/MuteCompiler.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="C:/Users/Renaud/workspace/MuteGrammar/MuteInterpreter.jar" filesetmanifest="mergewithoutmain">
             <manifest>
-                <attribute name="Main-Class" value="MuteCompiler"/>
+                <attribute name="Main-Class" value="MuteInterpreter"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="C:/Users/Renaud/workspace/MuteGrammar/bin"/>

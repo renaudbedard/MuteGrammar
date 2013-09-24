@@ -8,48 +8,37 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface MuteListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link MuteParser#statement}.
+	 * Enter a parse tree produced by {@link MuteParser#stringExpansion}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatement(@NotNull MuteParser.StatementContext ctx);
+	void enterStringExpansion(@NotNull MuteParser.StringExpansionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MuteParser#statement}.
+	 * Exit a parse tree produced by {@link MuteParser#stringExpansion}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatement(@NotNull MuteParser.StatementContext ctx);
+	void exitStringExpansion(@NotNull MuteParser.StringExpansionContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link MuteParser#assignmentList}.
+	 * Enter a parse tree produced by {@link MuteParser#conditionStatementPart}.
 	 * @param ctx the parse tree
 	 */
-	void enterAssignmentList(@NotNull MuteParser.AssignmentListContext ctx);
+	void enterConditionStatementPart(@NotNull MuteParser.ConditionStatementPartContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MuteParser#assignmentList}.
+	 * Exit a parse tree produced by {@link MuteParser#conditionStatementPart}.
 	 * @param ctx the parse tree
 	 */
-	void exitAssignmentList(@NotNull MuteParser.AssignmentListContext ctx);
+	void exitConditionStatementPart(@NotNull MuteParser.ConditionStatementPartContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link MuteParser#operation}.
+	 * Enter a parse tree produced by {@link MuteParser#range}.
 	 * @param ctx the parse tree
 	 */
-	void enterOperation(@NotNull MuteParser.OperationContext ctx);
+	void enterRange(@NotNull MuteParser.RangeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MuteParser#operation}.
+	 * Exit a parse tree produced by {@link MuteParser#range}.
 	 * @param ctx the parse tree
 	 */
-	void exitOperation(@NotNull MuteParser.OperationContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link MuteParser#assignment}.
-	 * @param ctx the parse tree
-	 */
-	void enterAssignment(@NotNull MuteParser.AssignmentContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MuteParser#assignment}.
-	 * @param ctx the parse tree
-	 */
-	void exitAssignment(@NotNull MuteParser.AssignmentContext ctx);
+	void exitRange(@NotNull MuteParser.RangeContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link MuteParser#condition}.
@@ -63,15 +52,147 @@ public interface MuteListener extends ParseTreeListener {
 	void exitCondition(@NotNull MuteParser.ConditionContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link MuteParser#rValueExpression}.
+	 * Enter a parse tree produced by {@link MuteParser#unaryExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterRValueExpression(@NotNull MuteParser.RValueExpressionContext ctx);
+	void enterUnaryExpression(@NotNull MuteParser.UnaryExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MuteParser#rValueExpression}.
+	 * Exit a parse tree produced by {@link MuteParser#unaryExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitRValueExpression(@NotNull MuteParser.RValueExpressionContext ctx);
+	void exitUnaryExpression(@NotNull MuteParser.UnaryExpressionContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#operationStatementPart}.
+	 * @param ctx the parse tree
+	 */
+	void enterOperationStatementPart(@NotNull MuteParser.OperationStatementPartContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#operationStatementPart}.
+	 * @param ctx the parse tree
+	 */
+	void exitOperationStatementPart(@NotNull MuteParser.OperationStatementPartContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#genericOperation}.
+	 * @param ctx the parse tree
+	 */
+	void enterGenericOperation(@NotNull MuteParser.GenericOperationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#genericOperation}.
+	 * @param ctx the parse tree
+	 */
+	void exitGenericOperation(@NotNull MuteParser.GenericOperationContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#parenthezisedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterParenthezisedExpression(@NotNull MuteParser.ParenthezisedExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#parenthezisedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitParenthezisedExpression(@NotNull MuteParser.ParenthezisedExpressionContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatement(@NotNull MuteParser.StatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatement(@NotNull MuteParser.StatementContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#numericAtom}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumericAtom(@NotNull MuteParser.NumericAtomContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#numericAtom}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumericAtom(@NotNull MuteParser.NumericAtomContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#assignmentList}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentList(@NotNull MuteParser.AssignmentListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#assignmentList}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentList(@NotNull MuteParser.AssignmentListContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignment(@NotNull MuteParser.AssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignment(@NotNull MuteParser.AssignmentContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#lValueWrapper}.
+	 * @param ctx the parse tree
+	 */
+	void enterLValueWrapper(@NotNull MuteParser.LValueWrapperContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#lValueWrapper}.
+	 * @param ctx the parse tree
+	 */
+	void exitLValueWrapper(@NotNull MuteParser.LValueWrapperContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#binaryNumericExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBinaryNumericExpression(@NotNull MuteParser.BinaryNumericExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#binaryNumericExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBinaryNumericExpression(@NotNull MuteParser.BinaryNumericExpressionContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#binaryStringExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBinaryStringExpression(@NotNull MuteParser.BinaryStringExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#binaryStringExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBinaryStringExpression(@NotNull MuteParser.BinaryStringExpressionContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#assignmentStatementPart}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentStatementPart(@NotNull MuteParser.AssignmentStatementPartContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#assignmentStatementPart}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentStatementPart(@NotNull MuteParser.AssignmentStatementPartContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#assignmentOperation}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentOperation(@NotNull MuteParser.AssignmentOperationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#assignmentOperation}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentOperation(@NotNull MuteParser.AssignmentOperationContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link MuteParser#parse}.
@@ -94,15 +215,4 @@ public interface MuteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLValueExpression(@NotNull MuteParser.LValueExpressionContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link MuteParser#statementPart}.
-	 * @param ctx the parse tree
-	 */
-	void enterStatementPart(@NotNull MuteParser.StatementPartContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MuteParser#statementPart}.
-	 * @param ctx the parse tree
-	 */
-	void exitStatementPart(@NotNull MuteParser.StatementPartContext ctx);
 }

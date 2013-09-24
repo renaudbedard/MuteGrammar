@@ -18,15 +18,14 @@ statement
 	;
 	
 statementPart
-	: assignmentList
-	| operation
-	| condition
+	: assignmentList	# assignmentStatementPart
+	| operation			# operationStatementPart
+	| condition			# conditionStatementPart
 	;
 
 operation
-	: OPERATION_BEGIN STRING (',' rValueExpression)*? '}'
-	| OPERATION_BEGIN lValueExpression assignmentList '}'	
-	| OPERATION_BEGIN rValueExpression '}'
+	: OPERATION_BEGIN lValueExpression assignmentList '}'	# assignmentOperation	
+	| OPERATION_BEGIN rValueExpression '}'					# genericOperation
 	;
 
 condition
@@ -45,19 +44,23 @@ assignment
 	
 // An l-value expression is an alias to a location in memory; an assignable expression 
 lValueExpression
-	: lValueExpression '.' (lValueExpression | INT)
+	: lValueExpression '.' (ID | INT)
 	| ID
 	;
 	
 // An r-value expression is a expression that translates to a value, in-memory or literal
 rValueExpression
-    : '-' rValueExpression                							
-    | rValueExpression ('*' | '/') rValueExpression					
-    | rValueExpression ('+' | '-' | '&' | '|') rValueExpression
-    | (MODULE '.')? lValueExpression
-    | INT | RANGE | STRING
-    | '(' rValueExpression ')'
+    : '-' rValueExpression									# unaryExpression						
+    | rValueExpression ('*' | '/') rValueExpression			# binaryNumericExpression
+    | rValueExpression ('+' | '-') rValueExpression			# binaryNumericExpression
+    | rValueExpression ('&' | '|') rValueExpression			# binaryStringExpression
+    | (MODULE '.')? lValueExpression						# lValueWrapper
+    | STRING (',' rValueExpression)*?						# stringExpansion
+    | (INT | range)											# numericAtom
+    | '(' rValueExpression ')'								# parenthezisedExpression
     ;
+   
+range : INT '~' INT ;
     
 // ===========
 // LEXER RULES
@@ -68,7 +71,6 @@ COMMENT : '#' ~[\r\n]* -> skip ;
 STRING : '"' CHARACTER*? '"' ;
 MODULE : '<' ID '>' {inStatement = true;} ;
 ID : (ID_LETTER (ID_LETTER | DIGIT)* | '$') {inStatement = true;} ;
-RANGE : INT '~' INT ;
 INT : DIGIT+ ; 
 	
 COMP_OPERATOR : '>=' | '>' | '<=' | '<' | '=' ;
