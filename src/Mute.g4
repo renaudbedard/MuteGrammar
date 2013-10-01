@@ -38,7 +38,7 @@ assignmentList
 	;
 	
 assignment
-	: ID ':' rValueExpression
+	: (ID | INT) ':' rValueExpression
 	| rValueExpression
 	;
 	

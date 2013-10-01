@@ -551,6 +551,7 @@ public class MuteParser extends Parser {
 	}
 
 	public static class AssignmentContext extends ParserRuleContext {
+		public TerminalNode INT() { return getToken(MuteParser.INT, 0); }
 		public TerminalNode ID() { return getToken(MuteParser.ID, 0); }
 		public RValueExpressionContext rValueExpression() {
 			return getRuleContext(RValueExpressionContext.class,0);
@@ -577,13 +578,19 @@ public class MuteParser extends Parser {
 	public final AssignmentContext assignment() throws RecognitionException {
 		AssignmentContext _localctx = new AssignmentContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_assignment);
+		int _la;
 		try {
 			setState(88);
 			switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(84); match(ID);
+				setState(84);
+				_la = _input.LA(1);
+				if ( !(_la==ID || _la==INT) ) {
+				_errHandler.recoverInline(this);
+				}
+				consume();
 				setState(85); match(9);
 				setState(86); rValueExpression(0);
 				}
@@ -1101,9 +1108,9 @@ public class MuteParser extends Parser {
 		"\2CD\7\6\2\2DJ\3\2\2\2EF\7\27\2\2FG\5\20\t\2GH\7\6\2\2HJ\3\2\2\2I?\3\2"+
 		"\2\2IE\3\2\2\2J\13\3\2\2\2KL\7\30\2\2LQ\5\16\b\2MN\7\7\2\2NP\5\16\b\2"+
 		"OM\3\2\2\2PS\3\2\2\2QR\3\2\2\2QO\3\2\2\2RT\3\2\2\2SQ\3\2\2\2TU\7\3\2\2"+
-		"U\r\3\2\2\2VW\7\23\2\2WX\7\13\2\2X[\5\22\n\2Y[\5\22\n\2ZV\3\2\2\2ZY\3"+
-		"\2\2\2[\17\3\2\2\2\\]\b\t\1\2]^\7\23\2\2^d\3\2\2\2_`\6\t\2\3`a\7\5\2\2"+
-		"ac\t\2\2\2b_\3\2\2\2cf\3\2\2\2db\3\2\2\2de\3\2\2\2e\21\3\2\2\2fd\3\2\2"+
+		"U\r\3\2\2\2VW\t\2\2\2WX\7\13\2\2X[\5\22\n\2Y[\5\22\n\2ZV\3\2\2\2ZY\3\2"+
+		"\2\2[\17\3\2\2\2\\]\b\t\1\2]^\7\23\2\2^d\3\2\2\2_`\6\t\2\3`a\7\5\2\2a"+
+		"c\t\2\2\2b_\3\2\2\2cf\3\2\2\2db\3\2\2\2de\3\2\2\2e\21\3\2\2\2fd\3\2\2"+
 		"\2gh\b\n\1\2hi\7\n\2\2i}\5\22\n\2jk\7\22\2\2km\7\5\2\2lj\3\2\2\2lm\3\2"+
 		"\2\2mn\3\2\2\2n}\5\20\t\2ot\7\21\2\2pq\7\7\2\2qs\5\22\n\2rp\3\2\2\2sv"+
 		"\3\2\2\2tu\3\2\2\2tr\3\2\2\2u}\3\2\2\2vt\3\2\2\2w}\7\24\2\2xy\7\27\2\2"+

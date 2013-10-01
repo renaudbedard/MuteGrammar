@@ -1,7 +1,7 @@
 MuteGrammar
 ===========
 
-[ANTLR v4](https://github.com/antlr/antlr4) Grammar for [aliceffekt](https://github.com/aliceffekt)'s [mute](https://github.com/aliceffekt/mute) scripting language.
+[ANTLR v4](https://github.com/antlr/antlr4) Grammar and interpreter for [aliceffekt](https://github.com/aliceffekt)'s [mute](https://github.com/aliceffekt/mute) scripting language.
 
 ## How to test
 
@@ -10,7 +10,7 @@ MuteGrammar
 In a command line environment with Java 7 JRE installed, run :
 
 ```
-java -jar MuteCompiler.jar <filename>
+java -jar MuteInterpreter.jar <filename>
 ```
 
 Where  ``<filename>`` is a text file containing valid mute code.
@@ -26,7 +26,7 @@ Where  ``<filename>`` is a text file containing valid mute code.
 ## Status
 
 The ``Mute.g4`` grammar will parse everything from the [official Mute benchmark](https://github.com/aliceffekt/mute/blob/master/mute.benchmark.txt) at the time of this writing.
-``MuteCompiler.jar`` will try to interpret what it's given, but has no error tolerance and will not recognize conditions at the moment. See ``demo.mute`` to see what's supported and tested for.
+``MuteInterpreter.jar`` will try to interpret what it's given, but has no error tolerance and will not recognize conditions at the moment. See ``demo.mute`` to see what's supported and tested for.
 
 ###Current parsing limitations
 
@@ -34,3 +34,4 @@ The ``Mute.g4`` grammar will parse everything from the [official Mute benchmark]
 - Statement fragments that follow a module declaration must obey standard condition/assignation/operation block structure, but mute may accept anything at all as per the current spec
 - Identifiers must be ascii characters, unicode is not currently supported
 - Mac-style carriage returns without line feeds are not supported
+- The lexer will complain if it doesn't see an EOL before the EOF...
