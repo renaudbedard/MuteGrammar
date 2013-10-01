@@ -1,5 +1,6 @@
 
 public interface MutableAccess {
 	public Object get();
-	public void set(Object value);
+	public Statement getReference();
+	public void setReference(Statement newReference);
 }

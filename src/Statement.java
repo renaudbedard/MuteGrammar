@@ -14,7 +14,7 @@ class Statement implements Comparable<Statement>
 		this.name = name;
 	}
 	
-	final boolean isSingleton() { return values.size() == 1; }
+	final boolean isSingleton() { return values.size() == 1 && values.get(0).name == null; }
 	final boolean hasValue() { return values.size() > 0; }
 	
 	final Value findValueByName(String name) {

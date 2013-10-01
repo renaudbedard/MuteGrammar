@@ -1,5 +1,64 @@
-a[inA:"hello"]
-b[inB:a]
-c[b.inB.inA]
-a[inA:"goodbye"]
-d[1+2]
+#####################
+# assignation tests #
+#####################
+
+# numerical
+num_add[1+2]
+num_neg[-25]
+num_sub[5-2]
+num_div[12/4]
+num_mul[3*4]
+num_par[(4+5+11)/10]
+num_rnd[1~10]
+num_rnd_2[(1~10)~20]
+
+# references
+ref_a[inA:"hello"]
+ref_b[inB:ref_a]
+ref_c[ref_b.inB.inA]
+ref_a[inA:"goodbye"]
+ref_num[2]
+ref_num_2[ref_num + 3]
+ref_slf[0]
+ref_slf[$+1]
+
+# strings
+str_exp[("hello @", "world")]
+str_mle[("hello @ @", "my", "darling")]
+str_wld["world"]
+str_exv[("hello @", str_wld)]
+str_cat["hello" & " " & "world"]
+str_sub["extraordinary" | 5]
+
+# arrays
+arr_seq[1, 2, 3]
+arr_seq_2[4, 5, 6]
+arr_cat[arr_seq & arr_seq_2]
+arr_trm[arr_cat | 2]
+
+###################
+# operation tests #
+###################
+
+# stray
+{"stray operation"}
+
+# references
+[5]{"self reference : @", $}
+{"external reference : @", str_exp}
+{ope_ass["success!"]}
+{"assignment within operation : @", ope_ass}
+ope_nam[10]{"named self-referencing operation, current value = @", $}
+ope_nam[$+1]
+
+###################
+# condition tests #
+###################
+
+# existence
+
+# numerical
+
+# strings
+
+# references

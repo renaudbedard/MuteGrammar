@@ -56,12 +56,11 @@ rValueExpression
     | rValueExpression ('&' | '|') rValueExpression			# binaryStringExpression
     | (MODULE '.')? lValueExpression						# lValueWrapper
     | STRING (',' rValueExpression)*?						# stringExpansion
-    | (INT | range)											# numericAtom
+    | INT													# numericAtom
+    | rValueExpression '~' rValueExpression					# range
     | '(' rValueExpression ')'								# parenthezisedExpression
     ;
    
-range : INT '~' INT ;
-    
 // ===========
 // LEXER RULES
 // ===========

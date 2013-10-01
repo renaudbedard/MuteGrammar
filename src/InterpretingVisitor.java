@@ -16,6 +16,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 	
 	final Random random = new Random();
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object visitStatement(MuteParser.StatementContext ctx) {
 		Statement statement;
@@ -50,29 +51,8 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			ParseTree child = ctx.getChild(i);
 			
 			if (child instanceof MuteParser.AssignmentStatementPartContext) {
-				Collection<? extends Value> values = 
-						(Collection<? extends Value>) 
-						visitAssignmentStatementPart((MuteParser.AssignmentStatementPartContext) child);
-				
-				boolean anyNamed = false;
-				for (Value v : values)
-					if (v.name != null) {
-						anyNamed = true;
-						break;
-					}
-				if (!anyNamed)
-					statement.values.clear();
-					
-				for (Value newValue : values)
-				{
-					if (newValue.name != null && statement.namedValueExists(newValue.name))
-					{
-						Value oldValue = statement.findValueByName(newValue.name);
-						oldValue.value = newValue.value;
-					}
-					else
-						statement.values.add(newValue);
-				}
+				Collection<Value> values = (Collection<Value>) visitAssignmentStatementPart((MuteParser.AssignmentStatementPartContext) child);
+				assignValues(statement, values);
 			}
 			if (child instanceof MuteParser.ConditionStatementPartContext) {
 				Object condition = visitConditionStatementPart((MuteParser.ConditionStatementPartContext) child);
@@ -90,11 +70,37 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		
 		if (allConditionsPass)
 			for (Func<String> operation : statement.operations)
-				System.out.println(operation.evaluate());
+			{
+				String result = operation.evaluate();
+				if (result != null)
+					System.out.println(result);
+			}
 		
 		return statement;
 	}
 	
+	private static void assignValues(Statement statement, Collection<Value> values) {
+		boolean anyNamed = false;
+		for (Value v : values)
+			if (v.name != null) {
+				anyNamed = true;
+				break;
+			}
+		if (!anyNamed)
+			statement.values.clear();
+			
+		for (Value newValue : values)
+		{
+			if (newValue.name != null && statement.namedValueExists(newValue.name))
+			{
+				Value oldValue = statement.findValueByName(newValue.name);
+				oldValue.value = newValue.value;
+			}
+			else
+				statement.values.add(newValue);
+		}
+	}
+
 	@Override
 	public Object visitAssignmentStatementPart(MuteParser.AssignmentStatementPartContext ctx) {
 		return visitAssignmentList(ctx.assignmentList());
@@ -107,7 +113,13 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			ParseTree child = ctx.getChild(i);
 			if (child instanceof MuteParser.AssignmentContext) {
 				Object assignment =	visitAssignment((MuteParser.AssignmentContext) child);
-				assignmentList.add((Value) assignment);
+				
+				// only happens for array concatenation
+				if (assignment instanceof Value[]) {
+					for (Value subAssignment : (Value[])assignment)
+						assignmentList.add(subAssignment);
+				} else
+					assignmentList.add((Value) assignment);
 			}
 		}
 		
@@ -116,13 +128,55 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 	
 	@Override
 	public Object visitAssignment(MuteParser.AssignmentContext ctx) {
+		Object rhs = visit(ctx.rValueExpression());
+		// only happens for array concatenation
+		if (rhs instanceof Value[])
+			return rhs;
+		
 		Value value = new Value();
-		
-		if (ctx.ID() != null)
+		if (ctx.ID() != null) 
 			value.name = ctx.ID().getText();
-		value.value = visit(ctx.rValueExpression());
-		
+		value.value = rhs;
 		return value;
+	}
+
+	@Override
+	public Object visitGenericOperation(MuteParser.GenericOperationContext ctx) {
+		final MuteParser.GenericOperationContext operationContext = ctx;
+		final InterpretingVisitor outer = this;
+			
+		return new Func<String>() {
+			@Override
+			public String evaluate() {
+				return outer.visit(operationContext.rValueExpression()).toString();
+			}
+		};
+	}
+	
+	@Override
+	public Object visitAssignmentOperation(MuteParser.AssignmentOperationContext ctx) {
+		final MuteParser.AssignmentOperationContext operationContext = ctx;
+			
+		return new Func<String>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public String evaluate() {
+				MutableAccess lValue = (MutableAccess) visitLValueExpression(operationContext.lValueExpression());
+				Collection<Value> values = (Collection<Value>) visitAssignmentList(operationContext.assignmentList());
+				Statement lValueReference = lValue.getReference();
+				if (lValueReference == null)
+				{
+					lValueReference = new Statement();
+					if (operationContext.lValueExpression().ID() != null)
+					{
+						lValueReference.name = operationContext.lValueExpression().ID().getText();
+						namedStatements.put(lValueReference.name, lValueReference);
+					}
+				}
+				assignValues(lValueReference, values);
+				return null;
+			}
+		};
 	}
 	
 	@Override
@@ -133,17 +187,24 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 	
 	@Override
 	public Object visitNumericAtom(MuteParser.NumericAtomContext ctx) {
-		if (ctx.range() != null) {
-			int from = Integer.parseInt(ctx.range().INT(0).getText());
-			int to = Integer.parseInt(ctx.range().INT(1).getText());
-			return random.nextInt(to - from + 1) + from;
-		}
 		return Integer.parseInt(ctx.INT().getText());
+	}
+	
+	@Override
+	public Object visitRange(MuteParser.RangeContext ctx) {
+		int from = (int) visit(ctx.rValueExpression(0));
+		int to = (int) visit(ctx.rValueExpression(1));
+		return random.nextInt(to - from + 1) + from;
 	}
 	
 	@Override
 	public Object visitUnaryExpression(MuteParser.UnaryExpressionContext ctx) {
 		return -1 * (int) visit(ctx.rValueExpression());
+	}
+	
+	@Override
+	public Object visitParenthezisedExpression(MuteParser.ParenthezisedExpressionContext ctx) {
+		return visit(ctx.rValueExpression());
 	}
 	
 	@Override
@@ -169,11 +230,62 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			ParseTree childAt = ctx.getChild(i);
 			if (childAt instanceof MuteParser.RValueExpressionContext) {
 				Object value = visit(childAt);
-				str = str.replaceFirst("@", value.toString());
+				String replaced;
+				if (value instanceof Statement)
+					replaced = ((Statement) value).values.toString();
+				else
+					replaced = value.toString();
+				str = str.replaceFirst("@", replaced);
 			}
 		}
 		
 		return str;
+	}
+	
+	@Override
+	public Object visitBinaryStringExpression(MuteParser.BinaryStringExpressionContext ctx) {
+		switch (ctx.getChild(1).getText()) {
+			case "&": { 
+				Object lhs = visit(ctx.rValueExpression(0));
+				
+				if (lhs instanceof String)
+					return (String) lhs + (String) visit(ctx.rValueExpression(1));
+				
+				if (lhs instanceof Statement)
+				{
+					Statement rhs = (Statement) visit(ctx.rValueExpression(1));
+					Value[] retArray = new Value[((Statement)lhs).values.size() + rhs.values.size()];
+					int i = 0;
+					for (Value v : ((Statement)lhs).values) retArray[i++] = v;
+					for (Value v : rhs.values) retArray[i++] = v;
+					return retArray;
+				}
+				
+				throw new RuntimeException();
+			}
+				
+			// case "|":
+			default: {
+				// substring operator (no length)
+				Object lhs = visit(ctx.rValueExpression(0));
+				int rhs = (int) visit(ctx.rValueExpression(1));
+				
+				if (lhs instanceof String)
+					return ((String)lhs).substring(rhs);
+				
+				if (lhs instanceof Statement)
+				{
+					List<Value> origArray = ((Statement)lhs).values;
+					Value[] retArray = new Value[origArray.size() - rhs];
+					int i = 0;
+					for (int j = rhs; j < origArray.size(); j++)
+						retArray[i++] = origArray.get(j);
+					return retArray;
+				}
+				
+				throw new RuntimeException();
+			}
+		}		
 	}
 	
 	@Override
@@ -189,7 +301,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		}
 
 		String hostName = (String) nameStack.pop();
-		Statement hostStatement = hostName == "$" ? currentStatement : namedStatements.get(hostName);
+		Statement hostStatement = hostName.equals("$") ? currentStatement : namedStatements.get(hostName);
 		Value referencedValue = null;
 		
 		while (!nameStack.empty()) {
@@ -212,19 +324,23 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		final boolean isValue = lValueValue != null;
 		
 		return new MutableAccess() {
+			Statement newReference = null;
+			
 			@Override
 			public Object get() {
-				return isValue ? lValueValue.value : lValueStatement;
+				Statement r = newReference;
+				if (r == null) r = lValueStatement;
+				return isValue ? lValueValue.value : r.isSingleton() ? r.values.get(0).value : r;
 			}
 
 			@Override
-			public void set(Object value) {
-				if (isValue)	
-					lValueValue.value = value;
-				else {
-					lValueStatement.values.clear();
-					lValueStatement.values.add(new Value(null, value));
-				}
+			public Statement getReference() {
+				return newReference == null ? lValueStatement : newReference;
+			}
+			
+			@Override
+			public void setReference(Statement reference) {
+				newReference = reference;
 			}
 		};
 	}

@@ -23,6 +23,8 @@ public class MuteInterpreter {
 		InterpretingVisitor visitor = new InterpretingVisitor();
 		tree.accept(visitor);
 		
+		System.out.println("\n## MEMORY DUMP FOLLOWS ##\n");
+		
 		Statement[] ss = new Statement[visitor.namedStatements.size()];
 		visitor.namedStatements.values().toArray(ss);
 		Arrays.sort(ss);
