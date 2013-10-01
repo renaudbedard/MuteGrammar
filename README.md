@@ -26,7 +26,8 @@ The compiler currently outputs the lisp-style parse tree it detects, with a line
 
 ## Status
 
-The ``Mute.g4`` grammar will parse everything from the [official Mute benchmark](https://github.com/aliceffekt/mute/blob/master/mute.benchmark.txt) at the time of this writing, but does nothing with the parsed output!
+The ``Mute.g4`` grammar will parse everything from the [official Mute benchmark](https://github.com/aliceffekt/mute/blob/master/mute.benchmark.txt) at the time of this writing.
+``MuteCompiler.jar`` will try to interpret what it's given, but has no error tolerance and will not recognize conditions at the moment. See ``demo.mute`` to see what's supported, and an example usage.
 
 ###Current parsing limitations
 
