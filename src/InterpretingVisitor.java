@@ -89,18 +89,10 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		if (!anyNamed)
 			statement.values.clear();
 			
-		for (Value newValue : values)
-		{
-			if (newValue.name != null && statement.namedValueExists(newValue.name))
-			{
-				Value oldValue = statement.findValueByName(newValue.name);
-				oldValue.value = newValue.value;
-			}
-			else
-				statement.values.add(newValue);
-		}
+		for (Value value : values)
+			statement.setValue(value);
 	}
-
+	
 	@Override
 	public Object visitAssignmentStatementPart(MuteParser.AssignmentStatementPartContext ctx) {
 		return visitAssignmentList(ctx.assignmentList());
@@ -133,10 +125,9 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		if (rhs instanceof Value[])
 			return rhs;
 		
-		Value value = new Value();
-		if (ctx.ID() != null) 
-			value.name = ctx.ID().getText();
-		value.value = rhs;
+		Value value = new Value(rhs);
+		if (ctx.ID() != null) 			value.name = ctx.ID().getText();
+		else if (ctx.INT() != null)		value.name = Integer.parseInt(ctx.INT().getText());
 		return value;
 	}
 
@@ -163,17 +154,21 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			public String evaluate() {
 				MutableAccess lValue = (MutableAccess) visitLValueExpression(operationContext.lValueExpression());
 				Collection<Value> values = (Collection<Value>) visitAssignmentList(operationContext.assignmentList());
-				Statement lValueReference = lValue.getReference();
-				if (lValueReference == null)
+				
+				if (!lValue.exists())
 				{
-					lValueReference = new Statement();
+					Statement statement = new Statement();
 					if (operationContext.lValueExpression().ID() != null)
 					{
-						lValueReference.name = operationContext.lValueExpression().ID().getText();
-						namedStatements.put(lValueReference.name, lValueReference);
+						statement.name = operationContext.lValueExpression().ID().getText();
+						namedStatements.put(statement.name, statement);
 					}
+					lValue.set(statement);
 				}
-				assignValues(lValueReference, values);
+				
+				Statement hostStatement = (Statement) lValue.get();
+				assignValues(hostStatement, values);
+				
 				return null;
 			}
 		};
@@ -256,8 +251,11 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 					Statement rhs = (Statement) visit(ctx.rValueExpression(1));
 					Value[] retArray = new Value[((Statement)lhs).values.size() + rhs.values.size()];
 					int i = 0;
-					for (Value v : ((Statement)lhs).values) retArray[i++] = v;
-					for (Value v : rhs.values) retArray[i++] = v;
+					for (Value v : ((Statement)lhs).getValues()) retArray[i++] = v;
+					for (Value v : rhs.getValues()) {
+						retArray[i] = v;
+						retArray[i++].name = null; // will be filled in later
+					}
 					return retArray;
 				}
 				
@@ -275,11 +273,14 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				
 				if (lhs instanceof Statement)
 				{
-					List<Value> origArray = ((Statement)lhs).values;
-					Value[] retArray = new Value[origArray.size() - rhs];
+					Value[] origArray = ((Statement)lhs).getValues();
+					Value[] retArray = new Value[origArray.length - rhs];
 					int i = 0;
-					for (int j = rhs; j < origArray.size(); j++)
-						retArray[i++] = origArray.get(j);
+					for (int j = rhs; j < origArray.length; j++)
+					{
+						retArray[i] = origArray[j];
+						retArray[i++].name = null; // will be filled in later
+					}
 					return retArray;
 				}
 				
@@ -290,57 +291,65 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 	
 	@Override
 	public Object visitLValueExpression(MuteParser.LValueExpressionContext ctx) {
-		Stack<Object> nameStack = new Stack<Object>();
-
-		nameStack.add(ctx.ID().getText());
-		MuteParser.LValueExpressionContext curCtx = ctx;
-		while (curCtx.getChildCount() > 1) {
-			curCtx = curCtx.lValueExpression();
-			if (curCtx.INT() != null)	nameStack.add((Integer) Integer.parseInt(curCtx.INT().getText()));
-			else						nameStack.add(curCtx.ID().getText());
-		}
-
-		String hostName = (String) nameStack.pop();
-		Statement hostStatement = hostName.equals("$") ? currentStatement : namedStatements.get(hostName);
-		Value referencedValue = null;
-		
-		while (!nameStack.empty()) {
-			Object rhs = nameStack.pop();
-			if (rhs instanceof Integer)
-				referencedValue = hostStatement.values.get((Integer)rhs);
-			else
-				referencedValue = hostStatement.findValueByName((String)rhs);
-			
-			if (referencedValue.value instanceof Statement) {
-				hostStatement = (Statement) referencedValue.value;
-				referencedValue = null;
-			}
-			else
-				hostStatement = null;
-		}
-		
-		final Statement lValueStatement = hostStatement;
-		final Value lValueValue = referencedValue;
-		final boolean isValue = lValueValue != null;
+		final Statement contextStatement = currentStatement;
+		final MuteParser.LValueExpressionContext parseContext = ctx;
 		
 		return new MutableAccess() {
-			Statement newReference = null;
+			//final Object snapshotValue = get(); // might be useful?
+			
+			Statement hostStatement = null;
+			Object valueName = null;
 			
 			@Override
 			public Object get() {
-				Statement r = newReference;
-				if (r == null) r = lValueStatement;
-				return isValue ? lValueValue.value : r.isSingleton() ? r.values.get(0).value : r;
-			}
+				hostStatement = null;
+				valueName = null;
+				
+				Stack<Object> nameStack = new Stack<Object>();
 
-			@Override
-			public Statement getReference() {
-				return newReference == null ? lValueStatement : newReference;
+				MuteParser.LValueExpressionContext curCtx = parseContext;
+				do
+				{
+					if (curCtx.INT() != null)	nameStack.add((Integer) Integer.parseInt(curCtx.INT().getText()));
+					else						nameStack.add(curCtx.ID().getText());
+					curCtx = curCtx.lValueExpression();
+				}
+				while (curCtx != null);
+
+				String hostName = (String) nameStack.pop();
+				hostStatement = hostName.equals("$") ? contextStatement : namedStatements.get(hostName);
+				Object referencedValue = null;
+				
+				while (!nameStack.empty()) {
+					valueName = nameStack.pop();
+					referencedValue = hostStatement.getValue(valueName);
+					
+					if (referencedValue instanceof Statement)
+						hostStatement = (Statement) referencedValue;
+				}
+				
+				if (referencedValue == null)
+				{
+					if (hostStatement == null)
+						return null;
+					
+					return hostStatement.isSingleton() ? hostStatement.getSingletonValue() : hostStatement;
+				}
+							
+				return referencedValue;
 			}
 			
 			@Override
-			public void setReference(Statement reference) {
-				newReference = reference;
+			public void set(Object newValue) {
+				get();
+				if (valueName == null)	hostStatement = (Statement) newValue;
+				else					hostStatement.setValue(new Value(newValue));
+			}
+			
+			@Override
+			public boolean exists() {
+				get();
+				return hostStatement != null;
 			}
 		};
 	}

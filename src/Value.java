@@ -1,11 +1,17 @@
 
 public class Value {
-	public String name = null;
+	public Object name = null;
 	public Object value = null;
 	
 	public Value() {}
 	
-	public Value(String name, Object value) {
+	public Value(Object value)
+	{
+		this.name = null;
+		this.value = value;
+	}
+	
+	public Value(Object name, Object value) {
 		this.name = name;
 		this.value = value;
 	}

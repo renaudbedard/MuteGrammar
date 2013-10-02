@@ -22,7 +22,10 @@ ref_num_2[ref_num + 3]
 ref_slf[0]
 ref_slf[$+1]
 ref_arr[1, 2, 3]
-ref_arr[2: 5] # TODO : this fails at the moment
+ref_arr[2: 5] 
+ref_idx[ref_arr.2]
+ref_clx[inner: ref_arr]
+ref_mix[ref_clx.inner.2]
 
 # strings
 str_exp[("hello @", "world")]
