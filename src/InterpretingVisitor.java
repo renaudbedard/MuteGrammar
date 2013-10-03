@@ -91,7 +91,33 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			statement.values.clear();
 			
 		for (Value value : values)
+		{
+			if (value.value instanceof Statement)
+			{
+				Statement copySource = (Statement) value.value;
+				
+				// values are copied by-value 
+				Value[] valuesCopy = copySource.getValues();
+				if (valuesCopy.length == 1)
+					value.value = valuesCopy[0].value; 
+				else
+					value.value = valuesCopy;
+				
+				// operations and conditions carry over!
+				if (copySource.conditions.size() > 0)
+				{
+					statement.conditions.clear();
+					statement.conditions.addAll(copySource.conditions);
+				}
+				if (copySource.operations.size() > 0)
+				{
+					statement.operations.clear();
+					statement.operations.addAll(copySource.operations);
+				}
+			}
+			
 			statement.setValue(value);
+		}
 	}
 	
 	@Override
@@ -125,10 +151,6 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		// array concatenation
 		if (rhs instanceof Value[])
 			return rhs;
-		
-		// statement by-value copy
-		if (rhs instanceof Statement)
-			rhs = ((Statement) rhs).getValues();
 		
 		Value value = new Value(rhs);
 		if (ctx.ID() != null) 			value.name = ctx.ID().getText();
@@ -206,10 +228,16 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		return visit(ctx.rValueExpression());
 	}
 	
+	static Object unbox(Object expression) {
+		if (expression instanceof Statement)
+			return ((Statement) expression).getSingletonValue();
+		return expression;
+	}
+	
 	@Override
 	public Object visitBinaryNumericExpression(MuteParser.BinaryNumericExpressionContext ctx) {
-		int lhs = (int) visit(ctx.rValueExpression(0));
-		int rhs = (int) visit(ctx.rValueExpression(1));
+		int lhs = (int) unbox(visit(ctx.rValueExpression(0)));
+		int rhs = (int) unbox(visit(ctx.rValueExpression(1)));
 		
 		switch (ctx.getChild(1).getText()) {
 			case "-": return lhs - rhs;
@@ -228,7 +256,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		for (int i=0; i<ctx.getChildCount(); i++) {
 			ParseTree childAt = ctx.getChild(i);
 			if (childAt instanceof MuteParser.RValueExpressionContext) {
-				Object value = visit(childAt);
+				Object value = unbox(visit(childAt));
 				String replaced;
 				if (value instanceof Statement)
 					replaced = ((Statement) value).values.toString();
@@ -340,10 +368,9 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				
 				if (referencedValue == null)
 				{
-					if (hostStatement == null)
+					if (hostStatement == null) 
 						return null;
-					
-					return hostStatement.isSingleton() ? hostStatement.getSingletonValue() : hostStatement;
+					return hostStatement;
 				}
 							
 				return referencedValue;

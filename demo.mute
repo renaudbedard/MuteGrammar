@@ -55,9 +55,14 @@ arr_trm[arr_cat | 2]
 {ope_ass["success!"]}
 {"assignment within operation : @", ope_ass}
 {ope_ass[str_wld]}
-{"derefencing for assignment within operation : @", ope_ass}
+{"dereferencing for assignment within operation : @", ope_ass}
 ope_nam[10]{"named self-referencing operation, current value = @", $}
 ope_nam[$+1]
+
+# operation carry-over
+ope_car_a[1]{"operation carry-over contains : @", $}
+ope_car_b[ope_car_a]
+ope_car_b[2]
 
 ###################
 # condition tests #
