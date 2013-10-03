@@ -58,10 +58,19 @@ class Statement implements Comparable<Statement>
 		String text = "[";
 		if (!isSingleton())
 		{
+			// test if they're all contiguous integers for pretty-printing
+			boolean contiguous = true;
+			int i = 1;
+			for (Object key : values.keySet())
+				contiguous &= key instanceof Integer && i++ == (int) key;
+			
 			for (Object key : values.keySet())
 			{
 				Object value = values.get(key);
-				text += key.toString() + ": " + (value instanceof Object[] ? Arrays.toString((Object[]) value) : value.toString()) + ", ";
+				String valueString = (value instanceof Object[] ? Arrays.toString((Object[]) value) : value.toString());
+				if (contiguous) text += valueString;
+				else			text += key.toString() + ": " + valueString;
+				text += ", ";
 			}
 			text = text.substring(0, text.length() - 2) + "]";
 		}
