@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -121,9 +122,13 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 	@Override
 	public Object visitAssignment(MuteParser.AssignmentContext ctx) {
 		Object rhs = visit(ctx.rValueExpression());
-		// only happens for array concatenation
+		// array concatenation
 		if (rhs instanceof Value[])
 			return rhs;
+		
+		// statement by-value copy
+		if (rhs instanceof Statement)
+			rhs = ((Statement) rhs).getValues();
 		
 		Value value = new Value(rhs);
 		if (ctx.ID() != null) 			value.name = ctx.ID().getText();
@@ -166,8 +171,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 					lValue.set(statement);
 				}
 				
-				Statement hostStatement = (Statement) lValue.get();
-				assignValues(hostStatement, values);
+				assignValues(lValue.getHostStatement(), values);
 				
 				return null;
 			}
@@ -326,6 +330,12 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 					
 					if (referencedValue instanceof Statement)
 						hostStatement = (Statement) referencedValue;
+					else if (referencedValue instanceof Value[])
+					{
+						// multi-dimensional arrays... kind of a hack
+						hostStatement = new Statement();
+						assignValues(hostStatement, Arrays.asList((Value[]) referencedValue));
+					}
 				}
 				
 				if (referencedValue == null)
@@ -350,6 +360,11 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			public boolean exists() {
 				get();
 				return hostStatement != null;
+			}
+			
+			@Override
+			public Statement getHostStatement() {
+				return hostStatement;
 			}
 		};
 	}

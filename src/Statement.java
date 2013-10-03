@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,18 @@ class Statement implements Comparable<Statement>
 	
 	@Override
 	public String toString() {
-		return String.format("%s %s", name, isSingleton() ? "{" + getSingletonValue() + "}" : values);
+		// make sure arrays-of-arrays are stringified
+		String text = "[";
+		if (!isSingleton())
+		{
+			for (Object key : values.keySet())
+			{
+				Object value = values.get(key);
+				text += key.toString() + ": " + (value instanceof Object[] ? Arrays.toString((Object[]) value) : value.toString()) + ", ";
+			}
+			text = text.substring(0, text.length() - 2) + "]";
+		}
+		return String.format("%s %s", name, isSingleton() ? "[" + getSingletonValue() + "]" : text);
 	}
 	@Override
 	public int compareTo(Statement o) {
