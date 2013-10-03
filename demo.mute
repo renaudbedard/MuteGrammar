@@ -41,6 +41,8 @@ arr_seq[1, 2, 3]
 arr_seq_2[4, 5, 6]
 arr_cat[arr_seq & arr_seq_2]
 arr_trm[arr_cat | 2]
+arr_cpy[arr_seq]
+arr_2d[arr_seq, arr_seq_2]
 
 ###################
 # operation tests #

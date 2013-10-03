@@ -48,12 +48,14 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				statement.operations.clear();
 		}
 		
+		boolean skipOperations = false;
+		
 		for (int i=0; i<ctx.getChildCount(); i++) {
 			ParseTree child = ctx.getChild(i);
 			
 			if (child instanceof MuteParser.AssignmentStatementPartContext) {
 				Collection<Value> values = (Collection<Value>) visitAssignmentStatementPart((MuteParser.AssignmentStatementPartContext) child);
-				assignValues(statement, values);
+				skipOperations |= assignValues(statement, values);
 			}
 			if (child instanceof MuteParser.ConditionStatementPartContext) {
 				Object condition = visitConditionStatementPart((MuteParser.ConditionStatementPartContext) child);
@@ -69,7 +71,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		for (Predicate p : statement.conditions)
 			allConditionsPass &= p.evaluate();
 		
-		if (allConditionsPass)
+		if (allConditionsPass && !skipOperations)
 			for (Func<String> operation : statement.operations)
 			{
 				String result = operation.evaluate();
@@ -80,7 +82,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		return statement;
 	}
 	
-	private static void assignValues(Statement statement, Collection<Value> values) {
+	private static boolean assignValues(Statement statement, Collection<Value> values) {
 		boolean anyNamed = false;
 		for (Value v : values)
 			if (v.name != null) {
@@ -89,19 +91,27 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			}
 		if (!anyNamed)
 			statement.values.clear();
-			
+		
+		boolean skipOperations = false;
+		
 		for (Value value : values)
 		{
+			boolean flattenArray = false;
+			
 			if (value.value instanceof Statement)
 			{
 				Statement copySource = (Statement) value.value;
+				skipOperations = true;
 				
 				// values are copied by-value 
 				Value[] valuesCopy = copySource.getValues();
 				if (valuesCopy.length == 1)
 					value.value = valuesCopy[0].value; 
 				else
+				{
 					value.value = valuesCopy;
+					flattenArray = values.size() == 1 && value.name == null;
+				}
 				
 				// operations and conditions carry over!
 				if (copySource.conditions.size() > 0)
@@ -116,8 +126,17 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				}
 			}
 			
-			statement.setValue(value);
+			if (flattenArray)
+			{
+				Value[] subValues = (Value[]) value.value;
+				for (Value subValue : subValues)
+					statement.setValue(subValue);
+			}
+			else
+				statement.setValue(value);
 		}
+		
+		return skipOperations;
 	}
 	
 	@Override
