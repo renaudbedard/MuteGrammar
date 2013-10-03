@@ -55,19 +55,6 @@ public class MuteBaseListener implements MuteListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterCondition(@NotNull MuteParser.ConditionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitCondition(@NotNull MuteParser.ConditionContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
 	@Override public void enterUnaryExpression(@NotNull MuteParser.UnaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -133,6 +120,19 @@ public class MuteBaseListener implements MuteListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterExistenceCondition(@NotNull MuteParser.ExistenceConditionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitExistenceCondition(@NotNull MuteParser.ExistenceConditionContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterNumericAtom(@NotNull MuteParser.NumericAtomContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -166,6 +166,19 @@ public class MuteBaseListener implements MuteListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitAssignment(@NotNull MuteParser.AssignmentContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterGenericCondition(@NotNull MuteParser.GenericConditionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitGenericCondition(@NotNull MuteParser.GenericConditionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

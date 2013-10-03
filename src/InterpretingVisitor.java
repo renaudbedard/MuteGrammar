@@ -140,6 +140,53 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 	}
 	
 	@Override
+	public Object visitConditionStatementPart(MuteParser.ConditionStatementPartContext ctx) {
+		return visit(ctx.condition());
+	}
+	
+	@Override
+	public Object visitGenericCondition(MuteParser.GenericConditionContext ctx) {
+		final MuteParser.GenericConditionContext conditionContext = ctx;
+		final String operator = ctx.COMP_OPERATOR().getText();
+		
+		return new Predicate() {
+			@SuppressWarnings({ "rawtypes", "unchecked" })
+			@Override
+			public boolean evaluate() {
+				Comparable lhs = (Comparable) unbox(visit(conditionContext.rValueExpression(0)));
+				Comparable rhs = (Comparable) unbox(visit(conditionContext.rValueExpression(1)));
+				
+				if (lhs == null || rhs == null)
+					return false;
+				
+				switch (operator)
+				{
+					case "=": 	return lhs.compareTo(rhs) == 0; 
+					case "<=":	return lhs.compareTo(rhs) <= 0;
+					case ">=":	return lhs.compareTo(rhs) >= 0;
+					case "<":	return lhs.compareTo(rhs) < 0;
+					case ">":	return lhs.compareTo(rhs) > 0;
+					default:	throw new RuntimeException("Unrecognized operator : " + operator);
+				}
+			}
+		};
+	}
+	
+	@Override
+	public Object visitExistenceCondition(MuteParser.ExistenceConditionContext ctx) {
+		final MuteParser.ExistenceConditionContext conditionContext = ctx;
+		
+		return new Predicate() {
+			@SuppressWarnings({ "rawtypes", "unchecked" })
+			@Override
+			public boolean evaluate() {
+				MutableAccess value = (MutableAccess) visitLValueExpression(conditionContext.lValueExpression());
+				return value != null && value.exists() && value.getHostStatement().hasValue();
+			}
+		};
+	}
+	
+	@Override
 	public Object visitAssignmentStatementPart(MuteParser.AssignmentStatementPartContext ctx) {
 		return visitAssignmentList(ctx.assignmentList());
 	}

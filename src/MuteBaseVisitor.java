@@ -41,14 +41,6 @@ public class MuteBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements M
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitCondition(@NotNull MuteParser.ConditionContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
 	@Override public T visitUnaryExpression(@NotNull MuteParser.UnaryExpressionContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -89,6 +81,14 @@ public class MuteBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements M
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitExistenceCondition(@NotNull MuteParser.ExistenceConditionContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitNumericAtom(@NotNull MuteParser.NumericAtomContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -106,6 +106,14 @@ public class MuteBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements M
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitAssignment(@NotNull MuteParser.AssignmentContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitGenericCondition(@NotNull MuteParser.GenericConditionContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

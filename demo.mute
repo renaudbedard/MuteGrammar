@@ -71,6 +71,13 @@ ope_car_b[2]
 ###################
 
 # existence
+cnd_exi($){"cnd_exi exists and has a value : @", $}
+cnd_exi[1]
+
 # numerical
+cnd_num($=1){"cnd_num equals 1 : @", $}
+cnd_num[2]
+cnd_num[1]
+
 # strings
 # references

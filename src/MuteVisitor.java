@@ -32,13 +32,6 @@ public interface MuteVisitor<T> extends ParseTreeVisitor<T> {
 	T visitRange(@NotNull MuteParser.RangeContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link MuteParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCondition(@NotNull MuteParser.ConditionContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link MuteParser#unaryExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -74,6 +67,13 @@ public interface MuteVisitor<T> extends ParseTreeVisitor<T> {
 	T visitStatement(@NotNull MuteParser.StatementContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link MuteParser#existenceCondition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExistenceCondition(@NotNull MuteParser.ExistenceConditionContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link MuteParser#numericAtom}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -93,6 +93,13 @@ public interface MuteVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssignment(@NotNull MuteParser.AssignmentContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link MuteParser#genericCondition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGenericCondition(@NotNull MuteParser.GenericConditionContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link MuteParser#lValueWrapper}.

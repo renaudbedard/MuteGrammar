@@ -29,8 +29,8 @@ operation
 	;
 
 condition
-	: CONDITION_BEGIN rValueExpression COMP_OPERATOR rValueExpression ')'
-	| CONDITION_BEGIN lValueExpression ')' // existence predicate
+	: CONDITION_BEGIN rValueExpression COMP_OPERATOR rValueExpression ')'	# genericCondition
+	| CONDITION_BEGIN lValueExpression ')'									# existenceCondition
 	;
 	
 assignmentList

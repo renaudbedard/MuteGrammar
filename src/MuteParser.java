@@ -416,32 +416,57 @@ public class MuteParser extends Parser {
 	}
 
 	public static class ConditionContext extends ParserRuleContext {
+		public ConditionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_condition; }
+	 
+		public ConditionContext() { }
+		public void copyFrom(ConditionContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class ExistenceConditionContext extends ConditionContext {
+		public LValueExpressionContext lValueExpression() {
+			return getRuleContext(LValueExpressionContext.class,0);
+		}
+		public TerminalNode CONDITION_BEGIN() { return getToken(MuteParser.CONDITION_BEGIN, 0); }
+		public ExistenceConditionContext(ConditionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MuteListener ) ((MuteListener)listener).enterExistenceCondition(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MuteListener ) ((MuteListener)listener).exitExistenceCondition(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MuteVisitor ) return ((MuteVisitor<? extends T>)visitor).visitExistenceCondition(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class GenericConditionContext extends ConditionContext {
 		public TerminalNode COMP_OPERATOR() { return getToken(MuteParser.COMP_OPERATOR, 0); }
 		public RValueExpressionContext rValueExpression(int i) {
 			return getRuleContext(RValueExpressionContext.class,i);
-		}
-		public LValueExpressionContext lValueExpression() {
-			return getRuleContext(LValueExpressionContext.class,0);
 		}
 		public TerminalNode CONDITION_BEGIN() { return getToken(MuteParser.CONDITION_BEGIN, 0); }
 		public List<RValueExpressionContext> rValueExpression() {
 			return getRuleContexts(RValueExpressionContext.class);
 		}
-		public ConditionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_condition; }
+		public GenericConditionContext(ConditionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).enterCondition(this);
+			if ( listener instanceof MuteListener ) ((MuteListener)listener).enterGenericCondition(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MuteListener ) ((MuteListener)listener).exitCondition(this);
+			if ( listener instanceof MuteListener ) ((MuteListener)listener).exitGenericCondition(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MuteVisitor ) return ((MuteVisitor<? extends T>)visitor).visitCondition(this);
+			if ( visitor instanceof MuteVisitor ) return ((MuteVisitor<? extends T>)visitor).visitGenericCondition(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -453,6 +478,7 @@ public class MuteParser extends Parser {
 			setState(71);
 			switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
 			case 1:
+				_localctx = new GenericConditionContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(61); match(CONDITION_BEGIN);
@@ -464,6 +490,7 @@ public class MuteParser extends Parser {
 				break;
 
 			case 2:
+				_localctx = new ExistenceConditionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(67); match(CONDITION_BEGIN);

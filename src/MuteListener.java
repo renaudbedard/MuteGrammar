@@ -41,17 +41,6 @@ public interface MuteListener extends ParseTreeListener {
 	void exitRange(@NotNull MuteParser.RangeContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link MuteParser#condition}.
-	 * @param ctx the parse tree
-	 */
-	void enterCondition(@NotNull MuteParser.ConditionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MuteParser#condition}.
-	 * @param ctx the parse tree
-	 */
-	void exitCondition(@NotNull MuteParser.ConditionContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link MuteParser#unaryExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -107,6 +96,17 @@ public interface MuteListener extends ParseTreeListener {
 	void exitStatement(@NotNull MuteParser.StatementContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link MuteParser#existenceCondition}.
+	 * @param ctx the parse tree
+	 */
+	void enterExistenceCondition(@NotNull MuteParser.ExistenceConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#existenceCondition}.
+	 * @param ctx the parse tree
+	 */
+	void exitExistenceCondition(@NotNull MuteParser.ExistenceConditionContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link MuteParser#numericAtom}.
 	 * @param ctx the parse tree
 	 */
@@ -138,6 +138,17 @@ public interface MuteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAssignment(@NotNull MuteParser.AssignmentContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link MuteParser#genericCondition}.
+	 * @param ctx the parse tree
+	 */
+	void enterGenericCondition(@NotNull MuteParser.GenericConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MuteParser#genericCondition}.
+	 * @param ctx the parse tree
+	 */
+	void exitGenericCondition(@NotNull MuteParser.GenericConditionContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link MuteParser#lValueWrapper}.
