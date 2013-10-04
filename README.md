@@ -7,13 +7,33 @@ MuteGrammar
 
 ### Using the jar file
 
+#### With a file as input
+
 In a command line environment with Java 7 JRE installed, run :
 
 ```
 java -jar MuteInterpreter.jar <filename>
 ```
 
-Where  ``<filename>`` is a text file containing valid mute code.
+Where ``<filename>`` is a text file containing valid mute code.
+
+#### As an interactive interpreter
+
+If the ``<filename>`` is omitted, an interactive mode starts instead, which allows you to enter Mute statements line by line and seeing the results.
+
+```
+C:\Users\Renaud\workspace\MuteGrammar>java -jar MuteInterpreter.jar
+
+Mute Interactive Interpreter (version 1.0)
+==========================================
+Type exit to exit.
+
+> a[1]
+> a{"@",$}
+1
+> exit
+Exiting.
+```
 
 ### Using the ANTLR4 tools
 
@@ -26,9 +46,9 @@ Where  ``<filename>`` is a text file containing valid mute code.
 ## Status
 
 The ``Mute.g4`` grammar will parse everything from the [official Mute benchmark](https://github.com/aliceffekt/mute/blob/master/mute.benchmark.txt) at the time of this writing.
-``MuteInterpreter.jar`` will try to interpret what it's given, but has no error tolerance and will not recognize conditions at the moment. See ``demo.mute`` to see what's supported and tested for.
+``MuteInterpreter.jar`` supports everything except modules, but has low error tolerance. See ``demo.mute`` to see what's supported and tested for.
 
-###Current parsing limitations
+### Current parsing limitations
 
 - Requires identifiers (names) to be at the beginning of a statement
 - Statement fragments that follow a module declaration must obey standard condition/assignation/operation block structure, but mute may accept anything at all as per the current spec

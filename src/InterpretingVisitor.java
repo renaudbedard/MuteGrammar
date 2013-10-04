@@ -378,7 +378,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 					return retArray;
 				}
 				
-				throw new RuntimeException();
+				throw new RuntimeException("Unrecognized type : " + lhs.getClass());
 			}
 				
 			// case "|":
@@ -403,7 +403,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 					return retArray;
 				}
 				
-				throw new RuntimeException();
+				throw new RuntimeException("Unrecognized type : " + lhs.getClass());
 			}
 		}		
 	}
