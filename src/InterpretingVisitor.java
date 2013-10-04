@@ -49,7 +49,6 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		}
 		
 		boolean skipOperations = false;
-		
 		for (int i=0; i<ctx.getChildCount(); i++) {
 			ParseTree child = ctx.getChild(i);
 			
@@ -101,10 +100,9 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			if (value.value instanceof Statement)
 			{
 				Statement copySource = (Statement) value.value;
-				skipOperations = true;
 				
 				// values are copied by-value 
-				Value[] valuesCopy = copySource.getValues();
+				Value[] valuesCopy = copySource.getValues().values;
 				if (valuesCopy.length == 1)
 					value.value = valuesCopy[0].value; 
 				else
@@ -121,6 +119,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				}
 				if (copySource.operations.size() > 0)
 				{
+					skipOperations = true;
 					statement.operations.clear();
 					statement.operations.addAll(copySource.operations);
 				}
@@ -153,20 +152,38 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			@Override
 			public boolean evaluate() {
-				Comparable lhs = (Comparable) unbox(visit(conditionContext.rValueExpression(0)));
-				Comparable rhs = (Comparable) unbox(visit(conditionContext.rValueExpression(1)));
+				Object lhs = unbox(visit(conditionContext.rValueExpression(0)));
+				Object rhs = unbox(visit(conditionContext.rValueExpression(1)));
 				
-				if (lhs == null || rhs == null)
+				if ((lhs == null || rhs == null) && !(lhs == null && rhs == null))
 					return false;
 				
+				if (lhs instanceof Comparable && rhs instanceof Comparable)
+				{
+					Comparable clhs = (Comparable) lhs;
+					Comparable crhs = (Comparable) rhs;
+					
+					try {
+						switch (operator) {
+							case "=": 	return clhs.compareTo(crhs) == 0; 
+							case "<=":	return clhs.compareTo(crhs) <= 0;
+							case ">=":	return clhs.compareTo(crhs) >= 0;
+							case "<":	return clhs.compareTo(crhs) < 0;
+							case ">":	return clhs.compareTo(crhs) > 0;
+							default:	throw new RuntimeException("Unrecognized operator : " + operator);
+						}
+					} catch (ClassCastException ex) {
+						//throw new RuntimeException("Arguments of type " + lhs.getClass() + " and " + rhs.getClass() + " can not be compared!");
+						// TODO : Warning mechanism?
+						return false;
+					}
+				}
+				
+				// fallback on equality
 				switch (operator)
 				{
-					case "=": 	return lhs.compareTo(rhs) == 0; 
-					case "<=":	return lhs.compareTo(rhs) <= 0;
-					case ">=":	return lhs.compareTo(rhs) >= 0;
-					case "<":	return lhs.compareTo(rhs) < 0;
-					case ">":	return lhs.compareTo(rhs) > 0;
-					default:	throw new RuntimeException("Unrecognized operator : " + operator);
+					case "=": 	return lhs.equals(rhs); 
+					default:	throw new RuntimeException("Unsupported or unrecognized operator : " + operator);
 				}
 			}
 		};
@@ -177,7 +194,6 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		final MuteParser.ExistenceConditionContext conditionContext = ctx;
 		
 		return new Predicate() {
-			@SuppressWarnings({ "rawtypes", "unchecked" })
 			@Override
 			public boolean evaluate() {
 				MutableAccess value = (MutableAccess) visitLValueExpression(conditionContext.lValueExpression());
@@ -296,7 +312,16 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 	
 	static Object unbox(Object expression) {
 		if (expression instanceof Statement)
-			return ((Statement) expression).getSingletonValue();
+		{
+			Statement statement = (Statement) expression;
+			if (statement.hasValue())
+			{
+				if (statement.isSingleton())
+					return statement.getSingletonValue();
+				return statement.getValues();
+			}
+			return null;
+		}
 		return expression;
 	}
 	
@@ -323,11 +348,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			ParseTree childAt = ctx.getChild(i);
 			if (childAt instanceof MuteParser.RValueExpressionContext) {
 				Object value = unbox(visit(childAt));
-				String replaced;
-				if (value instanceof Statement)
-					replaced = ((Statement) value).values.toString();
-				else
-					replaced = value.toString();
+				String replaced = value.toString();
 				str = str.replaceFirst("@", replaced);
 			}
 		}
@@ -371,7 +392,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				
 				if (lhs instanceof Statement)
 				{
-					Value[] origArray = ((Statement)lhs).getValues();
+					Value[] origArray = ((Statement)lhs).getValues().values;
 					Value[] retArray = new Value[origArray.length - rhs];
 					int i = 0;
 					for (int j = rhs; j < origArray.length; j++)

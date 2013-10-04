@@ -61,10 +61,17 @@ arr_2d[arr_seq, arr_seq_2]
 ope_nam[10]{"named self-referencing operation, current value = @", $}
 ope_nam[$+1]
 
-# operation carry-over
+# arrays
+ope_arr[1, 2, 3]{"array : @", $}
+
+# carry-over
 ope_car_a[1]{"operation carry-over contains : @", $}
 ope_car_b[ope_car_a]
 ope_car_b[2]
+
+# overwrite
+ope_ovw{"original operation"}
+ope_ovw{"overwritten operation"}
 
 ###################
 # condition tests #
@@ -75,9 +82,57 @@ cnd_exi($){"cnd_exi exists and has a value : @", $}
 cnd_exi[1]
 
 # numerical
-cnd_num($=1){"cnd_num equals 1 : @", $}
-cnd_num[2]
-cnd_num[1]
+cnd_eq($=1){"1 = @", $}
+cnd_eq[2]
+cnd_eq[1]
+cnd_eq[0]
+
+cnd_gt($>1){"@ > 1", $}
+cnd_gt[2]
+cnd_gt[1]
+cnd_gt[0]
+
+cnd_lt($<1){"@ < 1", $}
+cnd_lt[0]
+cnd_lt[1]
+cnd_lt[2]
+
+cnd_lte($<=1){"@ <= 1", $}
+cnd_lte[2]
+cnd_lte[1]
+cnd_lte[0]
+
+cnd_gte($>=1){"@ >= 1", $}
+cnd_gte[0]
+cnd_gte[1]
+cnd_gte[2]
 
 # strings
+cnd_seq($ = "hello"){"hello = @", $}
+cnd_seq["world"]
+cnd_seq["hello"]
+
+# arrays
+cnd_arr($=arr_seq){"@ = @", $, arr_seq}
+cnd_arr[1, 2]
+cnd_arr[1, 2, 3, 4]
+cnd_arr[arr_seq]
+
 # references
+cnd_ref($.inner = arr_seq.2){"@ = @", $, arr_seq.2}
+cnd_ref[1]
+cnd_ref[2]
+
+# mixed types
+cnd_mix["hello"]($=1){"this shouldn't happen : @ = @", $, 1}
+
+# carry-over
+cnd_car_a($){"carried over existence predicate, value is : @", $}
+cnd_car_b[cnd_car_a]
+cnd_car_b[1]
+
+# overwrite
+cnd_ovw($=1){"should be 2 : @", $}
+cnd_ovw($=2)
+cnd_ovw[1]
+cnd_ovw[2]

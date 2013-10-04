@@ -1,6 +1,8 @@
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -11,8 +13,33 @@ public class MuteInterpreter {
 	
 	ANTLRInputStream inputStream;
 	
+	public MuteInterpreter() { }
 	public MuteInterpreter(ANTLRInputStream stream) {
 		inputStream = stream;
+	}
+	
+	public void startInteractiveMode() {
+		Scanner scanner = new Scanner(System.in);
+		InterpretingVisitor visitor = new InterpretingVisitor();
+		
+		while (true) {
+			String line = scanner.next();
+			if (line.equals("exit") || line.equals("quit"))
+				break;
+			line += "\n";
+			
+			try {
+				MuteLexer lexer = new MuteLexer(new ANTLRInputStream(new ByteArrayInputStream(line.getBytes("UTF-8"))));
+				CommonTokenStream tokens = new CommonTokenStream(lexer);
+				MuteParser parser = new MuteParser(tokens);
+				ParseTree tree = parser.parse();
+				tree.accept(visitor);
+			} catch (IOException ex) {
+				// ...
+			}
+		} 
+		
+		scanner.close();
 	}
 	
 	public void parse() {
@@ -33,16 +60,26 @@ public class MuteInterpreter {
 	}
 	
 	public static void main(String[] args) {
-		ANTLRInputStream input = null;
-		try {
-			FileInputStream fis = new FileInputStream(args[0]);
-			input = new ANTLRInputStream(fis);
-			fis.close();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		MuteInterpreter interpreter;
 		
-		MuteInterpreter interpreter = new MuteInterpreter(input);
-		interpreter.parse();
+		if (args.length == 0)
+		{
+			interpreter = new MuteInterpreter();
+			interpreter.startInteractiveMode();
+		}
+		else
+		{
+			ANTLRInputStream input = null;
+			try {
+				FileInputStream fis = new FileInputStream(args[0]);
+				input = new ANTLRInputStream(fis);
+				fis.close();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			
+			interpreter = new MuteInterpreter(input);
+			interpreter.parse();
+		}
 	}
 }

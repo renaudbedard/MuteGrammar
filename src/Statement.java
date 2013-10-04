@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,12 +33,12 @@ class Statement implements Comparable<Statement>
 	Object getValue(Object name) {
 		return values.get(name);
 	}
-	Value[] getValues() {
+	ValueCollection getValues() {
 		Value[] copy = new Value[values.size()];
 		int i = 0;
 		for (Object k : values.keySet())
 			copy[i++] = new Value(k, values.get(k));
-		return copy;
+		return new ValueCollection(copy);
 	}
 	
 	int getNextIndex() {
@@ -54,26 +53,10 @@ class Statement implements Comparable<Statement>
 	
 	@Override
 	public String toString() {
-		// make sure arrays-of-arrays are stringified
-		String text = "[";
-		if (!isSingleton())
-		{
-			// test if they're all contiguous integers for pretty-printing
-			boolean contiguous = true;
-			int i = 1;
-			for (Object key : values.keySet())
-				contiguous &= key instanceof Integer && i++ == (int) key;
+		String text = "";
+		if (hasValue() && !isSingleton())
+			text = getValues().toString();
 			
-			for (Object key : values.keySet())
-			{
-				Object value = values.get(key);
-				String valueString = (value instanceof Object[] ? Arrays.toString((Object[]) value) : value.toString());
-				if (contiguous) text += valueString;
-				else			text += key.toString() + ": " + valueString;
-				text += ", ";
-			}
-			text = text.substring(0, text.length() - 2) + "]";
-		}
 		return String.format("%s %s", name, isSingleton() ? "[" + getSingletonValue() + "]" : text);
 	}
 	@Override
