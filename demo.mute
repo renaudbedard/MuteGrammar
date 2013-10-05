@@ -138,3 +138,6 @@ cnd_ovw($=1){"should be 2 : @", $}
 cnd_ovw($=2)
 cnd_ovw[1]
 cnd_ovw[2]
+
+# loops
+cnd_lop[0]($<5){"Will loop while < 5 : @",$}{$[$+1]}{$}

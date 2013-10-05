@@ -75,7 +75,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				statement.operations.add((Func<String>) operation);
 			}
 		}
-		
+
 		if (ctx.MODULE() != null) {
 			// everything is redirected to the module
 			String moduleName = ctx.MODULE().getText();
@@ -85,18 +85,10 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			else
 				System.err.println("Module not found : " + moduleName);
 			
-		} else {
-			boolean allConditionsPass = true;
-			for (Predicate p : statement.conditions)
-				allConditionsPass &= p.evaluate();
-			
-			if (allConditionsPass && !skipOperations)
-				for (Func<String> operation : statement.operations)
-				{
-					String result = operation.evaluate();
-					if (result != null)
-						System.out.println(result);
-				}
+		} else if (!skipOperations) {
+			String result = statement.execute();
+			if (result != null && result.length() > 0)
+				System.out.println(result);
 		}
 		
 		return statement;
@@ -269,6 +261,10 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		return new Func<String>() {
 			@Override
 			public String evaluate() {
+				Object result = outer.visit(operationContext.rValueExpression());
+				if (result instanceof Statement)
+					return ((Statement)result).execute();
+					
 				return outer.visit(operationContext.rValueExpression()).toString();
 			}
 		};
@@ -358,7 +354,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			case "%":	return lhs % rhs;
 			case "*":	return lhs * rhs;
 			case "/":	return lhs / rhs;
-			case "^":	return Math.pow(lhs, rhs);
+			case "^":	return (int) Math.pow(lhs, rhs);
 			default:	throw new RuntimeException("Unrecognized operator : " + op);
 		}
 	}

@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 public class MuteInterpreter {
 	
-	private static final String VERSION = "1.0"; 
+	private static final String VERSION = "1.01"; 
 	
 	ANTLRInputStream inputStream;
 	
@@ -26,7 +26,7 @@ public class MuteInterpreter {
 	
 	public void startInteractiveMode() {
 		System.out.println("\nMute Interactive Interpreter (version " + VERSION + ")");
-		System.out.println("==========================================");
+		System.out.println("===========================================");
 		System.out.println("Type exit to exit.\n");
 		
 		Scanner scanner = new Scanner(System.in);

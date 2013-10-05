@@ -51,6 +51,24 @@ class Statement implements Comparable<Statement>
 		return nextIndex;
 	}
 	
+	String execute() {
+		boolean allConditionsPass = true;
+		for (Predicate p : conditions)
+			allConditionsPass &= p.evaluate();
+		
+		StringBuilder bld = new StringBuilder();
+		
+		if (allConditionsPass)
+			for (Func<String> operation : operations)
+			{
+				String result = operation.evaluate();
+				if (result != null)
+					bld.append(result + "\n");
+			}
+		
+		return bld.toString().trim();
+	}
+	
 	@Override
 	public String toString() {
 		String text = "";
