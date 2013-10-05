@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class ValueCollection implements Iterable<Value> {
@@ -8,6 +10,29 @@ public class ValueCollection implements Iterable<Value> {
 	
 	public ValueCollection(Value[] values) {
 		this.values = values;
+	}
+	
+	public boolean isArray() {
+		boolean retValue = true;
+		for (Value v : values)
+			retValue &= v.name instanceof Integer;
+		return retValue;
+	}
+	public boolean isContiguousArray() {
+		boolean contiguous = true;
+		int i = 1;
+		for (Value v : values)
+			contiguous &= v.name instanceof Integer && i++ == (int) v.name;
+		return contiguous;
+	}
+	
+	public Object[] asArray() {
+		List<Object> list = new ArrayList<Object>();
+		for (int i=0; i<values.length; i++)
+			list.add((int) values[i].name - 1, values[i].value);
+		
+		Object[] retValue = new Object[list.size()];
+		return list.toArray(retValue);
 	}
 	
 	@Override
@@ -19,12 +44,7 @@ public class ValueCollection implements Iterable<Value> {
 	public String toString() {
 		String text = "[";
 		
-		// test if they're all contiguous integers for pretty-printing
-		boolean contiguous = true;
-		int i = 1;
-		for (Value v : values)
-			contiguous &= v.name instanceof Integer && i++ == (int) v.name;
-		
+		boolean contiguous = isContiguousArray();
 		for (Value v : values)
 		{
 			String valueString = (v.value instanceof Object[] ? Arrays.toString((Object[]) v.value) : v.value.toString());
@@ -36,7 +56,7 @@ public class ValueCollection implements Iterable<Value> {
 		
 		return text;
 	}
-
+	
 	@Override
 	public Iterator<Value> iterator() {
 		return Arrays.asList(values).iterator();

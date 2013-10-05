@@ -5,15 +5,16 @@ import java.sql.SQLException;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 
-public class MySqlModule implements Module {
+public class MySqlModule extends Module {
 	
-	MysqlDataSource dataSource; 
-	Connection connection;
-	boolean isOpen;
+	private MysqlDataSource dataSource; 
+	private Connection connection;
+	private boolean isOpen;
 	
-	public MySqlModule() {
+	public MySqlModule(Memory memory) {
+		super(memory);
 	}
-	
+
 	void open() throws SQLException {
 		isOpen = true;
 		
@@ -26,25 +27,25 @@ public class MySqlModule implements Module {
 		connection = dataSource.getConnection();
 	}
 
-	@Override
-	public void evaluate(Statement statement) {
-		try { 
-			if (!isOpen)
-				open();
-			
-			// TODO : evaluate stuff
-			
-			// test code follows
-			java.sql.Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM Table");
-			
-			rs.close();
-			stmt.close();
-			
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-	}
+//	@Override
+//	public void evaluate(Statement statement) {
+//		try { 
+//			if (!isOpen)
+//				open();
+//			
+//			// TODO : evaluate stuff
+//			
+//			// test code follows
+//			java.sql.Statement stmt = connection.createStatement();
+//			ResultSet rs = stmt.executeQuery("SELECT * FROM Table");
+//			
+//			rs.close();
+//			stmt.close();
+//			
+//		} catch (SQLException ex) {
+//			ex.printStackTrace();
+//		}
+//	}
 	
 	@Override
 	public void close() {
@@ -56,5 +57,21 @@ public class MySqlModule implements Module {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	@Override
+	public void set(String name, int value) {
+	}
+
+	@Override
+	public void set(String name, String value) {
+	}
+
+	@Override
+	public void set(String name, Object[] values) {
+	}
+
+	@Override
+	public void set(String name, ValueCollection value) {
 	}
 }

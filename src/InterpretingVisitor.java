@@ -12,12 +12,16 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 	
-	public final Map<String, Statement> namedStatements = new HashMap<String, Statement>();
-	public final Map<String, Module> modules = new HashMap<String, Module>();
+	private final Memory memory;
+	
+	private final Map<String, Module> modules = new HashMap<String, Module>();
+	private final Random random = new Random();
 	
 	Statement currentStatement = null;
 	
-	final Random random = new Random();
+	public InterpretingVisitor(Memory memory) {
+		this.memory = memory; 
+	}
 	
 	public void registerModule(String name, Module module) {
 		modules.put(name, module);
@@ -37,12 +41,12 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		if (ctx.ID() != null) {
 			String name = ctx.ID().getText();
 			
-			if (!namedStatements.containsKey(name)) {
+			if (!memory.contains(name)) {
 				statement = new Statement(name);
-				namedStatements.put(name, statement);
+				memory.put(statement);
 			} else {
 				// fetch statement from memory and work with it instead
-				statement = namedStatements.get(name);
+				statement = memory.get(name);
 			}
 		}
 		else
@@ -287,7 +291,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 					if (operationContext.lValueExpression().ID() != null)
 					{
 						statement.name = operationContext.lValueExpression().ID().getText();
-						namedStatements.put(statement.name, statement);
+						memory.put(statement);
 					}
 					lValue.set(statement);
 				}
@@ -456,7 +460,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				while (curCtx != null);
 
 				String hostName = (String) nameStack.pop();
-				hostStatement = hostName.equals("$") ? contextStatement : namedStatements.get(hostName);
+				hostStatement = hostName.equals("$") ? contextStatement : memory.contains(hostName) ? memory.get(hostName) : null;
 				Object referencedValue = null;
 				
 				while (!nameStack.empty()) {

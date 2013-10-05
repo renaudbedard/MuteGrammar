@@ -1,24 +1,24 @@
 
 
-public class SystemModule implements Module {
+public class SystemModule extends Module {
 	
-	boolean log;
-	boolean memory;
-
-	@Override
-	public void evaluate(Statement statement) {
+	public SystemModule(Memory memory) {
+		super(memory);
 	}
 
 	@Override
-	public void close() {
-		
-//		System.out.println("\n## MEMORY DUMP FOLLOWS ##\n");
-//		
-//		Statement[] ss = new Statement[visitor.namedStatements.size()];
-//		visitor.namedStatements.values().toArray(ss);
-//		Arrays.sort(ss);
-//		for (Statement s : ss)
-//			System.out.println(s.toString());
+	public void set(String name, int value) {
 	}
 
+	@Override
+	public void set(String name, String value) {
+	}
+
+	@Override
+	public void set(String name, Object[] values) {
+	}
+
+	@Override
+	public void set(String name, ValueCollection value) {
+	}
 }

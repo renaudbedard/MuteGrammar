@@ -1,7 +1,6 @@
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -30,7 +29,8 @@ public class MuteInterpreter {
 		System.out.println("Type exit to exit.\n");
 		
 		Scanner scanner = new Scanner(System.in);
-		InterpretingVisitor visitor = new InterpretingVisitor();
+		Memory memory = new Memory();
+		InterpretingVisitor visitor = new InterpretingVisitor(memory);
 		registerModules(visitor);
 		
 		while (true) {
@@ -70,19 +70,13 @@ public class MuteInterpreter {
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		MuteParser parser = new MuteParser(tokens);
 		ParseTree tree = parser.parse();
-		InterpretingVisitor visitor = new InterpretingVisitor();
+		Memory memory = new Memory();
+		InterpretingVisitor visitor = new InterpretingVisitor(memory);
 		registerModules(visitor);
 		tree.accept(visitor);
 		
 		visitor.close();
-		
-		System.out.println("\n## MEMORY DUMP FOLLOWS ##\n");
-		
-		Statement[] ss = new Statement[visitor.namedStatements.size()];
-		visitor.namedStatements.values().toArray(ss);
-		Arrays.sort(ss);
-		for (Statement s : ss)
-			System.out.println(s.toString());
+		memory.dump();
 	}
 	
 	public static void main(String[] args) {

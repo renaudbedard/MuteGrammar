@@ -40,6 +40,9 @@ class Statement implements Comparable<Statement>
 			copy[i++] = new Value(k, values.get(k));
 		return new ValueCollection(copy);
 	}
+	Map<Object, Object> getValueMap() {
+		return values;
+	}
 	
 	int getNextIndex() {
 		int nextIndex = 1;
