@@ -11,6 +11,8 @@ num_mul[3*4]
 num_par[(4+5+11)/10]
 num_rnd[1~10]
 num_rnd_2[(1~10)~20]
+num_pow[2^3]
+num_mod[11%3]
 
 # references
 ref_a[inA:"hello"]

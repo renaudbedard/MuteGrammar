@@ -13,16 +13,26 @@ import org.antlr.v4.runtime.tree.ParseTree;
 public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 	
 	public final Map<String, Statement> namedStatements = new HashMap<String, Statement>();
+	public final Map<String, Module> modules = new HashMap<String, Module>();
+	
 	Statement currentStatement = null;
 	
 	final Random random = new Random();
+	
+	public void registerModule(String name, Module module) {
+		modules.put(name, module);
+	}
+	
+	public void close() {
+		for (Module m : modules.values())
+			m.close();
+		modules.clear();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object visitStatement(MuteParser.StatementContext ctx) {
 		Statement statement;
-		
-		// TODO : module support
 		
 		if (ctx.ID() != null) {
 			String name = ctx.ID().getText();
@@ -66,17 +76,28 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			}
 		}
 		
-		boolean allConditionsPass = true;
-		for (Predicate p : statement.conditions)
-			allConditionsPass &= p.evaluate();
-		
-		if (allConditionsPass && !skipOperations)
-			for (Func<String> operation : statement.operations)
-			{
-				String result = operation.evaluate();
-				if (result != null)
-					System.out.println(result);
-			}
+		if (ctx.MODULE() != null) {
+			// everything is redirected to the module
+			String moduleName = ctx.MODULE().getText();
+			moduleName = moduleName.substring(1, moduleName.length() - 1);
+			if (modules.containsKey(moduleName))
+				modules.get(moduleName).evaluate(statement);
+			else
+				System.err.println("Module not found : " + moduleName);
+			
+		} else {
+			boolean allConditionsPass = true;
+			for (Predicate p : statement.conditions)
+				allConditionsPass &= p.evaluate();
+			
+			if (allConditionsPass && !skipOperations)
+				for (Func<String> operation : statement.operations)
+				{
+					String result = operation.evaluate();
+					if (result != null)
+						System.out.println(result);
+				}
+		}
 		
 		return statement;
 	}
@@ -329,13 +350,16 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 	public Object visitBinaryNumericExpression(MuteParser.BinaryNumericExpressionContext ctx) {
 		int lhs = (int) unbox(visit(ctx.rValueExpression(0)));
 		int rhs = (int) unbox(visit(ctx.rValueExpression(1)));
+		String op = ctx.getChild(1).getText(); 
 		
-		switch (ctx.getChild(1).getText()) {
-			case "-": return lhs - rhs;
-			case "+": return lhs + rhs;
-			case "*": return lhs * rhs;
-			// case "/":
-			default:  return lhs / rhs;
+		switch (op) {
+			case "-":	return lhs - rhs;
+			case "+":	return lhs + rhs;
+			case "%":	return lhs % rhs;
+			case "*":	return lhs * rhs;
+			case "/":	return lhs / rhs;
+			case "^":	return Math.pow(lhs, rhs);
+			default:	throw new RuntimeException("Unrecognized operator : " + op);
 		}
 	}
 	

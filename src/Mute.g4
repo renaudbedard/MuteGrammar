@@ -50,15 +50,15 @@ lValueExpression
 	
 // An r-value expression is a expression that translates to a value, in-memory or literal
 rValueExpression
-    : '-' rValueExpression									# unaryExpression						
-    | rValueExpression ('*' | '/') rValueExpression			# binaryNumericExpression
-    | rValueExpression ('+' | '-') rValueExpression			# binaryNumericExpression
-    | rValueExpression ('&' | '|') rValueExpression			# binaryStringExpression
-    | (MODULE '.')? lValueExpression						# lValueWrapper
-    | STRING (',' rValueExpression)*?						# stringExpansion
-    | INT													# numericAtom
-    | rValueExpression '~' rValueExpression					# range
-    | '(' rValueExpression ')'								# parenthezisedExpression
+    : '-' rValueExpression											# unaryExpression						
+    | rValueExpression ('*' | '/' | '%' | '^') rValueExpression		# binaryNumericExpression
+    | rValueExpression ('+' | '-') rValueExpression					# binaryNumericExpression
+    | rValueExpression ('&' | '|') rValueExpression					# binaryStringExpression
+    | (MODULE '.')? lValueExpression								# lValueWrapper
+    | STRING (',' rValueExpression)*?								# stringExpansion
+    | INT															# numericAtom
+    | rValueExpression '~' rValueExpression							# range
+    | '(' rValueExpression ')'										# parenthezisedExpression
     ;
    
 // ===========

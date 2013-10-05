@@ -20,6 +20,10 @@ public class MuteInterpreter {
 		inputStream = stream;
 	}
 	
+	static void registerModules(InterpretingVisitor visitor) {
+		//visitor.registerModule("mysql", new MySqlModule());
+	}
+	
 	public void startInteractiveMode() {
 		System.out.println("\nMute Interactive Interpreter (version " + VERSION + ")");
 		System.out.println("==========================================");
@@ -27,16 +31,21 @@ public class MuteInterpreter {
 		
 		Scanner scanner = new Scanner(System.in);
 		InterpretingVisitor visitor = new InterpretingVisitor();
+		registerModules(visitor);
 		
 		while (true) {
 			System.out.print("> ");
 			
 			String line = scanner.next();
+			
+			// special case
 			if (line.trim().equals("exit"))
 			{
 				System.out.println("Exiting.");
 				break;
 			}
+			
+			// so the lexer doesn't complain...
 			line += "\n";
 			
 			try {
@@ -45,8 +54,7 @@ public class MuteInterpreter {
 				MuteParser parser = new MuteParser(tokens);
 				ParseTree tree = parser.parse();
 				tree.accept(visitor);
-			} catch (IOException ex) {
-				// ...
+				
 			} catch (Exception ex) {
 				System.err.print("INTERNAL ERROR : ");
 				ex.printStackTrace();
@@ -54,6 +62,7 @@ public class MuteInterpreter {
 		} 
 		
 		scanner.close();
+		visitor.close();
 	}
 	
 	public void parse() {
@@ -62,7 +71,10 @@ public class MuteInterpreter {
 		MuteParser parser = new MuteParser(tokens);
 		ParseTree tree = parser.parse();
 		InterpretingVisitor visitor = new InterpretingVisitor();
+		registerModules(visitor);
 		tree.accept(visitor);
+		
+		visitor.close();
 		
 		System.out.println("\n## MEMORY DUMP FOLLOWS ##\n");
 		
