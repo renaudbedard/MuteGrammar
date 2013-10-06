@@ -478,8 +478,10 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				
 				while (!nameStack.empty()) {
 					valueName = nameStack.pop();
-					referencedValue = hostStatement.getValue(valueName);
+					if (valueName instanceof String && valueName.equals("$"))
+						valueName = contextStatement.getSingletonValue();
 					
+					referencedValue = hostStatement.getValue(valueName);
 					if (referencedValue instanceof Statement)
 						hostStatement = (Statement) referencedValue;
 					else if (referencedValue instanceof Value[])
@@ -510,7 +512,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			@Override
 			public boolean exists() {
 				get();
-				return hostStatement != null;
+				return hostStatement != null && (valueName == null || hostStatement.values.containsKey(valueName));
 			}
 			
 			@Override
