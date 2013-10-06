@@ -1,20 +1,21 @@
 import java.sql.Connection;
-import java.sql.ResultSet;
+//import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 
-public class MySqlModule extends Module {
+public class MysqlModule extends Module {
 	
 	private MysqlDataSource dataSource; 
 	private Connection connection;
 	private boolean isOpen;
 	
-	public MySqlModule(Memory memory) {
-		super(memory);
+	@Override
+	public String getName() {
+		return "mysql";
 	}
-
+	
 	void open() throws SQLException {
 		isOpen = true;
 		
@@ -68,10 +69,18 @@ public class MySqlModule extends Module {
 	}
 
 	@Override
-	public void set(String name, Object[] values) {
+	public void set(String name, ValueCollection value) {
 	}
 
 	@Override
-	public void set(String name, ValueCollection value) {
+	public void set(String name, int[] values) {
+	}
+
+	@Override
+	public void set(String name, String[] values) {
+	}
+
+	@Override
+	public void execute(String operation) {
 	}
 }

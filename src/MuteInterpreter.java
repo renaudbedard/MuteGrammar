@@ -20,7 +20,7 @@ public class MuteInterpreter {
 	}
 	
 	static void registerModules(InterpretingVisitor visitor) {
-		//visitor.registerModule("mysql", new MySqlModule());
+		visitor.registerModule(new TestModule());
 	}
 	
 	public void startInteractiveMode() {

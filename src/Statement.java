@@ -7,44 +7,44 @@ import java.util.Map;
 class Statement implements Comparable<Statement>
 {
 	public String name = null;
-	Map<Object, Object> values = new HashMap<Object, Object>();
-	List<Predicate> conditions = new ArrayList<Predicate>();
-	List<Func<String>> operations = new ArrayList<Func<String>>();
+	public Map<Object, Object> values = new HashMap<Object, Object>();
+	public List<Predicate> conditions = new ArrayList<Predicate>();
+	public List<Func<String>> operations = new ArrayList<Func<String>>();
 
 	public Statement() { }
 	public Statement(String name) {
 		this.name = name;
 	}
 	
-	final boolean isSingleton() { return values.size() == 1 && values.containsKey(1); }
-	final Object getSingletonValue() { 
+	public boolean isSingleton() { return values.size() == 1 && values.containsKey(1); }
+	public Object getSingletonValue() { 
 		for (Object v : values.values())
 			return v;
 		return null;
 	}
 	
-	final boolean hasValue() { return values.size() > 0; }
+	public boolean hasValue() { return values.size() > 0; }
 	
-	void setValue(Value value) {
+	public void setValue(Value value) {
 		if (value.name == null)
 			value.name = getNextIndex();
 		values.put(value.name, value.value);
 	}
-	Object getValue(Object name) {
+	public Object getValue(Object name) {
 		return values.get(name);
 	}
-	ValueCollection getValues() {
+	public ValueCollection getValues() {
 		Value[] copy = new Value[values.size()];
 		int i = 0;
 		for (Object k : values.keySet())
 			copy[i++] = new Value(k, values.get(k));
 		return new ValueCollection(copy);
 	}
-	Map<Object, Object> getValueMap() {
+	public Map<Object, Object> getValueMap() {
 		return values;
 	}
 	
-	int getNextIndex() {
+	private int getNextIndex() {
 		int nextIndex = 1;
 		
 		for (Object name : values.keySet()) 
@@ -54,14 +54,17 @@ class Statement implements Comparable<Statement>
 		return nextIndex;
 	}
 	
-	String execute() {
+	public boolean testConditions() {
 		boolean allConditionsPass = true;
 		for (Predicate p : conditions)
 			allConditionsPass &= p.evaluate();
-		
+		return allConditionsPass;
+	}
+	
+	public String execute() {
 		StringBuilder bld = new StringBuilder();
 		
-		if (allConditionsPass)
+		if (testConditions())
 			for (Func<String> operation : operations)
 			{
 				String result = operation.evaluate();

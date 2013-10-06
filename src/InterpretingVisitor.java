@@ -23,8 +23,8 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 		this.memory = memory; 
 	}
 	
-	public void registerModule(String name, Module module) {
-		modules.put(name, module);
+	public void registerModule(Module module) {
+		modules.put(module.getName(), module);
 	}
 	
 	public void close() {
@@ -53,6 +53,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			statement = new Statement();
 		
 		currentStatement = statement;
+		boolean isModule = ctx.MODULE() != null;
 		
 		// conditions and statement accumulate, but clear if any one is defined
 		for (int i=0; i<ctx.getChildCount(); i++) {
@@ -61,6 +62,10 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			if (ctx.getChild(i) instanceof MuteParser.OperationStatementPartContext)
 				statement.operations.clear();
 		}
+		
+		List<String> moduleOperations = null;
+		if (isModule)
+			 moduleOperations = new ArrayList<String>();
 		
 		boolean skipOperations = false;
 		for (int i=0; i<ctx.getChildCount(); i++) {
@@ -75,17 +80,25 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				statement.conditions.add((Predicate) condition);
 			}
 			if (child instanceof MuteParser.OperationStatementPartContext) {
-				Object operation = visitOperationStatementPart((MuteParser.OperationStatementPartContext) child);
-				statement.operations.add((Func<String>) operation);
+				if (isModule)
+				{
+					String operationText = child.getText();
+					moduleOperations.add(operationText.substring(1, operationText.length() - 1));
+				}
+				else
+				{
+					Object operation = visitOperationStatementPart((MuteParser.OperationStatementPartContext) child);
+					statement.operations.add((Func<String>) operation);
+				}
 			}
 		}
 
-		if (ctx.MODULE() != null) {
+		if (isModule) {
 			// everything is redirected to the module
 			String moduleName = ctx.MODULE().getText();
 			moduleName = moduleName.substring(1, moduleName.length() - 1);
 			if (modules.containsKey(moduleName))
-				modules.get(moduleName).evaluate(statement);
+				modules.get(moduleName).evaluate(statement, moduleOperations);
 			else
 				System.err.println("Module not found : " + moduleName);
 			
@@ -120,7 +133,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				
 				// values are copied by-value 
 				Value[] valuesCopy = copySource.getValues().values;
-				if (valuesCopy.length == 1)
+				if (valuesCopy.length == 1 && valuesCopy[0].name instanceof Integer && (int)valuesCopy[0].name == 1)
 					value.value = valuesCopy[0].value; 
 				else
 				{
