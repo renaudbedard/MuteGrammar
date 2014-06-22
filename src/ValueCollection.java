@@ -1,14 +1,22 @@
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.mozilla.javascript.ScriptableObject;
 
-public class ValueCollection implements Iterable<Value> {
+
+public class ValueCollection extends ScriptableObject implements Iterable<Value> {
+	
+	private static final long serialVersionUID = 1L;
 	
 	Value[] values;
 	
-	public ValueCollection(Value[] values) {
+	public ValueCollection() {
+		values = new Value[] {};
+	}
+	ValueCollection(Value[] values) {
 		this.values = values;
 	}
 	
@@ -60,5 +68,30 @@ public class ValueCollection implements Iterable<Value> {
 	@Override
 	public Iterator<Value> iterator() {
 		return Arrays.asList(values).iterator();
+	}
+
+	@Override
+	public String getClassName() {
+		return "ValueCollection";
+	}
+	
+	boolean containsNamedValue(Object name) {
+		if (!(name instanceof String || name instanceof Integer))
+			throw new InvalidParameterException("name");
+		
+		for (int i=0; i<values.length; i++)
+			if (values[i].name == name)
+				return true;
+		return false;
+	}
+	
+	 Object getByName(Object name) {
+		if (!(name instanceof String || name instanceof Integer))
+			throw new InvalidParameterException("name");
+		
+		for (int i=0; i<values.length; i++)
+			if (values[i].name == name)
+				return values[i].value;
+		return null;
 	}
 }

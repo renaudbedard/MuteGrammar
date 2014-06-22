@@ -2,10 +2,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.annotations.JSFunction;
 
-public class Memory {
 
+public class Memory extends ScriptableObject {
+
+	private static final long serialVersionUID = 1L;
+	
 	private final Map<String, Statement> entries = new HashMap<String, Statement>();
+	
+	public Memory() {
+	}
 	
 	public boolean contains(String name) {
 		return entries.containsKey(name);
@@ -92,12 +100,27 @@ public class Memory {
 		return entries.get(name);
 	}
 	
+	@JSFunction
 	public void dump() {
-		System.out.println("\n## MEMORY DUMP FOLLOWS ##\n");
 		Statement[] ss = new Statement[entries.size()];
 		entries.values().toArray(ss);
 		Arrays.sort(ss);
 		for (Statement s : ss)
 			System.out.println(s.toString());
+	}
+	
+	@JSFunction
+	public void clear() {
+		entries.clear();
+	}
+
+	@Override
+	public String getClassName() {
+		return "Memory";
+	}
+	
+	@Override
+	public String getDefaultValue(Class<?> typeHint) {
+		return toString();
 	}
 }

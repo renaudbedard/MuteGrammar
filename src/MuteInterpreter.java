@@ -3,6 +3,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Scanner;
 
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -10,17 +11,13 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 public class MuteInterpreter {
 	
-	private static final String VERSION = "1.01"; 
+	private static final String VERSION = "1.02"; 
 	
 	ANTLRInputStream inputStream;
 	
 	public MuteInterpreter() { }
 	public MuteInterpreter(ANTLRInputStream stream) {
 		inputStream = stream;
-	}
-	
-	static void registerModules(InterpretingVisitor visitor) {
-		visitor.registerModule(new TestModule());
 	}
 	
 	public void startInteractiveMode() {
@@ -31,7 +28,6 @@ public class MuteInterpreter {
 		Scanner scanner = new Scanner(System.in);
 		Memory memory = new Memory();
 		InterpretingVisitor visitor = new InterpretingVisitor(memory);
-		registerModules(visitor);
 		
 		while (true) {
 			System.out.print("> ");
@@ -39,6 +35,7 @@ public class MuteInterpreter {
 			String line = scanner.next();
 			
 			// special case
+			// TODO : handle with a "system" module
 			if (line.trim().equals("exit"))
 			{
 				System.out.println("Exiting.");
@@ -72,11 +69,9 @@ public class MuteInterpreter {
 		ParseTree tree = parser.parse();
 		Memory memory = new Memory();
 		InterpretingVisitor visitor = new InterpretingVisitor(memory);
-		registerModules(visitor);
 		tree.accept(visitor);
 		
 		visitor.close();
-		memory.dump();
 	}
 	
 	public static void main(String[] args) {

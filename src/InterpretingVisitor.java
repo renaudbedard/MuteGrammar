@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,6 +26,7 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 	
 	public void registerModule(Module module) {
 		modules.put(module.getName(), module);
+		module.initialize(memory);
 	}
 	
 	public void close() {
@@ -80,13 +82,12 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 				statement.conditions.add((Predicate) condition);
 			}
 			if (child instanceof MuteParser.OperationStatementPartContext) {
-				if (isModule)
-				{
+				if (isModule) {
 					String operationText = child.getText();
-					moduleOperations.add(operationText.substring(1, operationText.length() - 1));
-				}
-				else
-				{
+					if (operationText.length() > 2)
+						moduleOperations.add(operationText.substring(1, operationText.length() - 1));
+					
+				} else {
 					Object operation = visitOperationStatementPart((MuteParser.OperationStatementPartContext) child);
 					statement.operations.add((Func<String>) operation);
 				}
@@ -97,10 +98,12 @@ public class InterpretingVisitor extends MuteBaseVisitor<Object> {
 			// everything is redirected to the module
 			String moduleName = ctx.MODULE().getText();
 			moduleName = moduleName.substring(1, moduleName.length() - 1);
-			if (modules.containsKey(moduleName))
-				modules.get(moduleName).evaluate(statement, moduleOperations);
-			else
-				System.err.println("Module not found : " + moduleName);
+			
+			// load on demand
+			if (!modules.containsKey(moduleName))
+				registerModule(new Module(moduleName, "modules" + File.separator + moduleName + ".js"));
+			
+			modules.get(moduleName).evaluate(statement, moduleOperations);
 			
 		} else if (!skipOperations) {
 			String result = statement.execute();
