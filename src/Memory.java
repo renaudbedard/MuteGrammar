@@ -2,11 +2,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mozilla.javascript.ScriptableObject;
-import org.mozilla.javascript.annotations.JSFunction;
 
-
-public class Memory extends ScriptableObject {
+public class Memory {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -100,7 +97,6 @@ public class Memory extends ScriptableObject {
 		return entries.get(name);
 	}
 	
-	@JSFunction
 	public void dump() {
 		Statement[] ss = new Statement[entries.size()];
 		entries.values().toArray(ss);
@@ -109,18 +105,7 @@ public class Memory extends ScriptableObject {
 			System.out.println(s.toString());
 	}
 	
-	@JSFunction
 	public void clear() {
 		entries.clear();
-	}
-
-	@Override
-	public String getClassName() {
-		return "Memory";
-	}
-	
-	@Override
-	public String getDefaultValue(Class<?> typeHint) {
-		return toString();
 	}
 }

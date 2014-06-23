@@ -25,7 +25,7 @@ public class Module {
             engine.eval (new FileReader (this.filename));
         }
         catch (Exception e) {
-            System.err.printf ("Unexpected exception caught while evaluation module '%s' javascript file '%s': %s\n", name, filename, e);
+            System.err.printf ("Unexpected exception caught while evaluating module '%s' javascript file '%s': %s\n", name, filename, e);
 //            e.printStackTrace();
         }
 	    
