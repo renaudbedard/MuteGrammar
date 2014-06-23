@@ -28,3 +28,6 @@ function exit() {
 	Java.type('java.lang.System').exit (0);
 }
 
+function throwError() {
+	throw "thrown from js";
+}

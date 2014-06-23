@@ -76,7 +76,8 @@ public class Module {
             ((Invocable) engine).invokeFunction (function);
         }
 	    catch (ScriptException e) {
-	        e.printStackTrace ();
+	    	System.err.printf ("{%s} in module <%s> threw an exception at line %s: '%s'\n", function, name, e.getLineNumber(), e.getCause().getMessage());
+//	        e.printStackTrace ();
 	    }
         catch (Exception  e) {
             if (errorMessage != null)
