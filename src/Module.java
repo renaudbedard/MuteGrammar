@@ -17,7 +17,6 @@ public class Module {
 	
 	public void initialize(Memory memory) {
 	    engine = new ScriptEngineManager().getEngineByName ("nashorn");
-	    
 
 	    engine.put ("memory", memory);
 	    engine.put ("console", Console.Instance);
@@ -49,7 +48,7 @@ public class Module {
 			    if (vc.isArray())
 			        engine.put (name, vc.asArray());
 			    else
-			        engine.put (name, new ValueCollection (vc.values));
+			        engine.put (name, vc);
 			}
 			else
 			    throw new RuntimeException("Value of type " + v.value.getClass().getSimpleName() + " is not supported");
