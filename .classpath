@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="C:/Program Files/ANTLR/antlr-4.1-complete.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Renaud/workspace/mysql-connector-java-5.0.8/mysql-connector-java-5.0.8-bin.jar" sourcepath="C:/Users/Renaud/workspace/mysql-connector-java-5.0.8/src"/>
-	<classpathentry kind="lib" path="C:/Users/Renaud/workspace/commons-lang/commons-lang3-3.1.jar" sourcepath="C:/Users/Renaud/workspace/commons-lang/commons-lang3-3.1-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/C:/Users/Renaud/workspace/commons-lang/commons-lang3-3.1-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Renaud/workspace/rhino1_7R4/js.jar" sourcepath="C:/Users/Renaud/workspace/rhino1_7R4/src">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/Users/Renaud/workspace/rhino1_7R4/javadoc/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_5"/>
+	<classpathentry kind="lib" path="lib/antlr-4.1-complete.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/js.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
