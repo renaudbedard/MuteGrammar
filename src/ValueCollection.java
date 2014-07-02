@@ -4,10 +4,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.mozilla.javascript.ScriptableObject;
 
-
-public class ValueCollection extends ScriptableObject implements Iterable<Value> {
+public class ValueCollection implements Iterable<Value> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -70,27 +68,22 @@ public class ValueCollection extends ScriptableObject implements Iterable<Value>
 		return Arrays.asList(values).iterator();
 	}
 
-	@Override
-	public String getClassName() {
-		return "ValueCollection";
-	}
-	
-	boolean containsNamedValue(Object name) {
-		if (!(name instanceof String || name instanceof Integer))
+	public boolean has(Object name) {
+		if (name == null || !(name instanceof String || name instanceof Integer))
 			throw new InvalidParameterException("name");
 		
 		for (int i=0; i<values.length; i++)
-			if (values[i].name == name)
+			if (values[i].name.equals(name))
 				return true;
 		return false;
 	}
 	
-	 Object getByName(Object name) {
-		if (!(name instanceof String || name instanceof Integer))
+	 public Object get(Object name) {
+		if (name == null || !(name instanceof String || name instanceof Integer))
 			throw new InvalidParameterException("name");
 		
 		for (int i=0; i<values.length; i++)
-			if (values[i].name == name)
+			if (values[i].name.equals(name))
 				return values[i].value;
 		return null;
 	}

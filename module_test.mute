@@ -1,0 +1,23 @@
+# try to load non-existing module
+<bogus>{nope}
+
+# assignment tests
+
+# singletons
+<test_suite>[numeric:1]
+<test_suite>[string:"foo"]
+
+# multi-valued
+array[1, 2, 3]
+<test_suite>[arrayCopy:array]
+object[foo:1]
+object[bar:"hi"]
+<test_suite>[objectRef:object]
+
+# operation tests
+
+<test_suite>{invalid}		# non-existing; expected to blow up
+<test_suite>{consoleTests}	 
+<test_suite>{dumpMemory}
+<test_suite>{javaInterop}	 
+<test_suite>{validate}
