@@ -3,15 +3,13 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <target name="create_run_jar">
-        <jar destfile="C:/Users/Renaud/workspace/MuteGrammar/MuteInterpreter.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="./MuteInterpreter.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="MuteInterpreter"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
-            <fileset dir="C:/Users/Renaud/workspace/MuteGrammar/bin"/>
-            <zipfileset excludes="META-INF/*.SF" src="C:/Program Files/ANTLR/antlr-4.1-complete.jar"/>
-        	<zipfileset src="C:/Users/Renaud/workspace/rhino1_7R4/js.jar"/>
-        	<zipfileset src="C:/Users/Renaud/workspace/commons-lang/commons-lang3-3.1.jar"/>
+            <fileset dir="./bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="./lib/antlr-4.1-complete.jar"/>
         </jar>
     </target>
 </project>

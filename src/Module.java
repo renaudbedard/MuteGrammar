@@ -25,7 +25,7 @@ public class Module {
             engine.eval (new FileReader (this.filename));
         }
         catch (Exception e) {
-            System.err.printf ("Unexpected exception caught while evaluation module '%s' javascript file '%s': %s\n", name, filename, e);
+            System.err.printf ("Unexpected exception caught while evaluating module '%s' javascript file '%s': %s\n", name, filename, e);
 //            e.printStackTrace();
         }
 	    
@@ -75,7 +75,8 @@ public class Module {
             ((Invocable) engine).invokeFunction (function);
         }
 	    catch (ScriptException e) {
-	        e.printStackTrace ();
+	    	System.err.printf ("{%s} in module <%s> threw an exception at line %s: '%s'\n", function, name, e.getLineNumber(), e.getCause().getMessage());
+//	        e.printStackTrace ();
 	    }
         catch (Exception  e) {
             if (errorMessage != null)
