@@ -1,3 +1,4 @@
+package com.xxiivv.mute;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;

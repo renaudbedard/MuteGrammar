@@ -1,3 +1,4 @@
+package com.xxiivv.mute;
 
 public interface MutableAccess {
 	public Object get();

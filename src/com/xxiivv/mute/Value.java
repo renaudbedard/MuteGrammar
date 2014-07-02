@@ -1,3 +1,4 @@
+package com.xxiivv.mute;
 public class Value {
 	public Object name = null;
 	public Object value = null;

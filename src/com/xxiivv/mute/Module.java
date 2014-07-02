@@ -1,3 +1,4 @@
+package com.xxiivv.mute;
 import java.io.FileReader;
 
 import javax.script.Invocable;
