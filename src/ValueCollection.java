@@ -7,8 +7,6 @@ import java.util.List;
 
 public class ValueCollection implements Iterable<Value> {
 	
-	private static final long serialVersionUID = 1L;
-	
 	Value[] values;
 	
 	public ValueCollection() {

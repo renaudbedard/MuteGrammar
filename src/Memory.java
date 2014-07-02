@@ -5,8 +5,6 @@ import java.util.Map;
 
 public class Memory {
 
-	private static final long serialVersionUID = 1L;
-	
 	private final Map<String, Statement> entries = new HashMap<String, Statement>();
 	
 	public Memory() {
