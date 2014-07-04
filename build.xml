@@ -5,7 +5,7 @@
     <target name="create_run_jar">
         <jar destfile="./MuteInterpreter.jar" filesetmanifest="mergewithoutmain">
             <manifest>
-                <attribute name="Main-Class" value="MuteInterpreter"/>
+                <attribute name="Main-Class" value="com.xxiivv.mute.MuteInterpreter"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="./bin"/>
