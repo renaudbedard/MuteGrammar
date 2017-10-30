@@ -24,7 +24,7 @@ statementPart
 	;
 
 operation
-	: OPERATION_BEGIN lValueExpression assignmentList '}'	# assignmentOperation	
+	: OPERATION_BEGIN lValueExpression assignmentList '}'   # assignmentOperation	
 	| OPERATION_BEGIN rValueExpression '}'					# genericOperation
 	;
 
